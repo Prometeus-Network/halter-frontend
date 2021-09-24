@@ -10,7 +10,6 @@
           <AppIcon v-if="['xs', 'sm', 'md'].includes(bp)" />
           <AppLogo v-else />
         </router-link>
-        <AppNavNetworkSelect v-if="!hideNetworkSelect" />
         <DarkModeToggle v-if="!upToLargeBreakpoint" class="ml-2" />
       </div>
 
@@ -36,7 +35,6 @@ import AppIcon from '@/components/images/AppIcon.vue';
 import AppNavAlert from './AppNavAlert.vue';
 import AppNavToggle from './AppNavToggle.vue';
 import AppNavActions from './AppNavActions.vue';
-import AppNavNetworkSelect from './AppNavNetworkSelect.vue';
 import useFathom from '@/composables/useFathom';
 import useWeb3 from '@/services/web3/useWeb3';
 import DarkModeToggle from '@/components/btns/DarkModeToggle.vue';
@@ -49,7 +47,6 @@ export default defineComponent({
     AppNavAlert,
     AppNavToggle,
     AppNavActions,
-    AppNavNetworkSelect,
     DarkModeToggle
   },
 

@@ -26,16 +26,6 @@ const isHomePage = computed(() => route.path === '/');
       <router-view :key="$route.path" />
     </div>
     <AppFooterNav v-if="upToLargeBreakpoint" />
-    <BalBtn
-      v-else
-      id="intercom-activator"
-      circle
-      size="lg"
-      color="blue"
-      class="fixed bottom-0 right-0 m-4 z-100"
-    >
-      <BalIcon name="message-square" size="lg" />
-    </BalBtn>
   </div>
 </template>
 

@@ -26,6 +26,7 @@ import '@/assets/css/tailwind.css';
 import '@/assets/css/index.css';
 import 'vue3-virtual-scroller/dist/vue3-virtual-scroller.css';
 import { Web3Provider } from '@ethersproject/providers';
+import VueKinesis from 'vue-kinesis';
 import Root from './Root';
 
 use([
@@ -48,7 +49,8 @@ const app = createApp(Root)
   .use(vueQuery)
   .use(Web3Plugin, Web3Provider)
   .mixin(mixins)
-  .use(VueVirtualScroller);
+  .use(VueVirtualScroller)
+  .use(VueKinesis);
 
 registerDirectives(app);
 registerGlobalComponents(app);

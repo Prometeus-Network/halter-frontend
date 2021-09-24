@@ -12,12 +12,6 @@
         :selectedTokens="selectedTokens"
         class="mb-8"
       />
-      <div class="px-4 lg:px-0" v-if="!hideV1Links">
-        <div class="text-black-600">{{ $t('seeV1BalancerInvestments') }}</div>
-        <BalLink :href="EXTERNAL_LINKS.Balancer.PoolsV1Dashboard" external>{{
-          $t('goToBalancerV1Site')
-        }}</BalLink>
-      </div>
       <div class="mb-16" />
     </template>
     <div class="px-4 lg:px-0">
@@ -40,18 +34,6 @@
       :selectedTokens="selectedTokens"
       class="mb-8"
     />
-    <div class="px-4 lg:px-0" v-if="!hideV1Links">
-      <div class="text-black-600">
-        {{ $t('tableShowsBalancerV2Pools') }}
-      </div>
-      <BalLink :href="EXTERNAL_LINKS.Balancer.PoolsV1Explore" external>{{
-        $t('exploreBalancerV1Pools')
-      }}</BalLink>
-    </div>
-
-    <div v-if="isElementSupported" class="mt-16 p-4 lg:p-0">
-      <FeaturedPools />
-    </div>
   </div>
 </template>
 
@@ -63,7 +45,6 @@ import { useI18n } from 'vue-i18n';
 import { EXTERNAL_LINKS } from '@/constants/links';
 import TokenSearchInput from '@/components/inputs/TokenSearchInput.vue';
 import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
-import FeaturedPools from '@/components/sections/FeaturedPools.vue';
 import usePools from '@/composables/pools/usePools';
 import useWeb3 from '@/services/web3/useWeb3';
 import usePoolFilters from '@/composables/pools/usePoolFilters';
@@ -72,8 +53,7 @@ import useAlerts, { AlertPriority, AlertType } from '@/composables/useAlerts';
 export default defineComponent({
   components: {
     TokenSearchInput,
-    PoolsTable,
-    FeaturedPools
+    PoolsTable
   },
 
   setup() {

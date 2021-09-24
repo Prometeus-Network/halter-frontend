@@ -10,8 +10,8 @@
     >
       <h6>New to Ethereum?</h6>
       <p class="text-sm">
-        Balancer is a DeFi app on Ethereum. To invest and trade here, you'll
-        first need to set up an Ethereum Wallet.
+        Halter is a DeFi app on Ethereum. To invest and trade here, you'll first
+        need to set up an Ethereum Wallet.
         <BalLink :href="EXTERNAL_LINKS.Ethereum.Wallets" external>
           Learn More
           <span class="align-middle"

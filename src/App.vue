@@ -12,6 +12,11 @@ import { DEFAULT_TOKEN_DECIMALS } from '@/constants/tokens';
 import Notifications from '@/components/notifications/Notifications.vue';
 import useGnosisSafeApp from './composables/useGnosisSafeApp';
 import useGlobalQueryWatchers from './composables/watchers/useGlobalQueryWatchers';
+import useBreakpoints from './composables/useBreakpoints';
+import { tryPromiseWithTimeout } from './lib/utils/promise';
+import useTokens from './composables/useTokens';
+import useAlerts, { AlertPriority, AlertType } from './composables/useAlerts';
+import { KinesisContainer } from 'vue-kinesis';
 
 BigNumber.config({ DECIMAL_PLACES: DEFAULT_TOKEN_DECIMALS });
 
@@ -83,9 +88,5 @@ export default defineComponent({
 <style>
 .VueQueryDevtoolsPanel + button {
   @apply text-black bg-gray-100 p-2 rounded text-sm;
-}
-
-#intercom-activator {
-  z-index: 2147483004;
 }
 </style>

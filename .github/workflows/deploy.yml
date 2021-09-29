@@ -2,8 +2,8 @@ name: Deploy (testnet)
 
 env:
   REGISTRY: registry.digitalocean.com
-  IMAGE_NAME: halter/halter-client
-  HELM_CHART: halter-client
+  IMAGE_NAME: halter/halter-frontend
+  HELM_CHART: halter-frontend
 
 on:
   workflow_dispatch:

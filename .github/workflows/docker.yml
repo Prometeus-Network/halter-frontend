@@ -2,7 +2,7 @@ name: Build docker image (testnet)
 
 env:
   REGISTRY: registry.digitalocean.com
-  IMAGE_NAME: halter/halter-client
+  IMAGE_NAME: halter/halter-frontend
 
 on:
   push:

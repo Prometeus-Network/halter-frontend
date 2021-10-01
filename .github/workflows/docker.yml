@@ -1,4 +1,4 @@
-name: Deploy (testnet)
+name: Build & Deploy (testnet)
 
 env:
   REGISTRY: registry.digitalocean.com

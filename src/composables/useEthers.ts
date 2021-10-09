@@ -8,7 +8,6 @@ import {
   tryPromiseWithTimeout
 } from '@/lib/utils/promise';
 
-import useBlocknative from './useBlocknative';
 import useTransactions from './useTransactions';
 import useTokens from './useTokens';
 import SafeAppsSDK from '@gnosis.pm/safe-apps-sdk';
@@ -23,7 +22,6 @@ export const processedTxs = ref<Set<string>>(new Set(''));
 
 export default function useEthers() {
   const { finalizeTransaction, updateTransaction } = useTransactions();
-  const { supportsBlocknative } = useBlocknative();
   const { refetchBalances } = useTokens();
 
   async function txListener(
@@ -64,7 +62,7 @@ export default function useEthers() {
         finalizeTransaction(txHash, 'tx', receipt);
       }
       callbacks.onTxConfirmed(tx);
-      if (shouldRefetchBalances && !supportsBlocknative.value) {
+      if (shouldRefetchBalances) {
         refetchBalances.value();
       }
     } catch (error) {

@@ -14,8 +14,7 @@ import {
 
 const ENV = process.env.VUE_APP_ENV || 'development';
 // only disable if set to "false"
-const USE_BLOCKNATIVE_GAS_PLATFORM =
-  process.env.VUE_APP_USE_BLOCKNATIVE_GAS_PLATFORM === 'false' ? false : true;
+const USE_BLOCKNATIVE_GAS_PLATFORM = false;
 const GAS_LIMIT_BUFFER = 0.1;
 
 const RPC_INVALID_PARAMS_ERROR_CODE = -32602;

@@ -4,14 +4,12 @@ import { watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useAlerts, { AlertPriority, AlertType } from '../useAlerts';
 
-import useBlocknative from '../useBlocknative';
 import useTokens from '../useTokens';
 import useTransactions, { ReplacementReason } from '../useTransactions';
 
 export default function useWeb3Watchers() {
   // COMPOSABLES
   const { t } = useI18n();
-  const { blocknative, supportsBlocknative } = useBlocknative();
   const {
     appNetworkConfig,
     chainId,
@@ -46,30 +44,28 @@ export default function useWeb3Watchers() {
   watch(
     () => account.value,
     (newAccount, oldAccount) => {
-      if (supportsBlocknative.value) {
-        if (oldAccount) blocknative.unsubscribe(oldAccount);
-        if (!newAccount) return;
-
-        const { emitter } = blocknative.account(newAccount);
-        emitter.on('txConfirmed', () => {
-          refetchBalances.value();
-          refetchAllowances.value();
-        });
-
-        emitter.on('txSpeedUp', tx =>
-          handleTransactionReplacement(
-            tx as EthereumTransactionData,
-            'txSpeedUp'
-          )
-        );
-
-        emitter.on('txCancel', tx =>
-          handleTransactionReplacement(
-            tx as EthereumTransactionData,
-            'txCancel'
-          )
-        );
-      }
+      // TODO Rewrite
+      // if (supportsBlocknative.value) {
+      //   if (oldAccount) blocknative.unsubscribe(oldAccount);
+      //   if (!newAccount) return;
+      //   const { emitter } = blocknative.account(newAccount);
+      //   emitter.on('txConfirmed', () => {
+      //     refetchBalances.value();
+      //     refetchAllowances.value();
+      //   });
+      //   emitter.on('txSpeedUp', tx =>
+      //     handleTransactionReplacement(
+      //       tx as EthereumTransactionData,
+      //       'txSpeedUp'
+      //     )
+      //   );
+      //   emitter.on('txCancel', tx =>
+      //     handleTransactionReplacement(
+      //       tx as EthereumTransactionData,
+      //       'txCancel'
+      //     )
+      //   );
+      // }
     }
   );
 

@@ -1,0 +1,54 @@
+{
+    "key": "4002",
+    "chainId": 4002,
+    "chainName": "Fantom",
+    "name": "Fantom Testnet",
+    "shortName": "Fantom",
+    "network": "fantom",
+    "unknown": false,
+    "rpc": "https://rpc.testnet.fantom.network/",
+    "ws": "wss://rpc.testnet.fantom.network/",
+    "loggingRpc": "https://rpc.testnet.fantom.network/",
+    "explorer": "https://testnet.ftmscan.com",
+    "subgraph": "https://testnet.thegraph.halter.finance/subgraphs/name/halter/halter",
+    "poolsUrlV1": "",
+    "poolsUrlV2": "",
+    "supportsEIP1559": true,
+    "nativeAsset": {
+      "name": "Fantom",
+      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "symbol": "FTM",
+      "decimals": 18,
+      "deeplinkId": "fantom",
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x4E15361FD6b4BB609Fa63C81A2be19d873717870/logo.png"
+    },
+    "addresses": {
+        "exchangeProxy": "",
+        "merkleRedeem": "",
+        "multicall": "",
+        "authorizer": "0x1Fadbe1b8E220746Aa0b71438E2A98B3b1fbC848",
+        "vault": "0xe8Ff274dEB1610177659D73967BAf4BCb5f800Ff",
+        "weightedPoolFactory": "0x2dB05b4A7f92b536C419f821B5B716C14A1AE56a",
+        "stablePoolFactory": "0xae81DdCED2596a78a673e4ddb219e015181751de",
+        "weth": "0x1EF81Cc9040A7bf316EeD03BcAe56EdC645E1425",
+        "stETH": "",
+        "wstETH": "",
+        "lidoRelayer": "",
+        "balancerHelpers": "0x1EEcF6462D7925CDf7FF629b2E633A274885da94"
+      },
+      "strategies": {
+        "0": {
+          "type": "0",
+          "name": "stablePool"
+        },
+        "1": {
+          "type": "1",
+          "name": "weightedPool"
+        },
+        "2": {
+          "type": "2",
+          "name": "weightedPool"
+        }
+      },
+      "supportsElementPools": false
+    }

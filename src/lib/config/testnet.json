@@ -7,7 +7,7 @@
     "network": "fantom",
     "unknown": false,
     "rpc": "https://rpc.testnet.fantom.network/",
-    "ws": "wss://rpc.testnet.fantom.network/",
+    "ws": "wss://wsapi.testnet.fantom.network",
     "loggingRpc": "https://rpc.testnet.fantom.network/",
     "explorer": "https://testnet.ftmscan.com",
     "subgraph": "https://testnet.thegraph.halter.finance/subgraphs/name/halter/halter",

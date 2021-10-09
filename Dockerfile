@@ -1,6 +1,9 @@
 FROM node:16-alpine as builder
 WORKDIR /app
 
+ARG NETWORK
+ENV VUE_APP_NETWORK=$NETWORK
+
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN apk --no-cache add git
 RUN apk add --no-cache --virtual .gyp \

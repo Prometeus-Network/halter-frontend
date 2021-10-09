@@ -5,7 +5,7 @@ import polygon from './polygon.json';
 import arbitrum from './arbitrum.json';
 import docker from './docker.json';
 import test from './test.json';
-import fantom from './fantom.json';
+import fantomTestnet from './testnet.json';
 
 export interface Config {
   key: string;
@@ -62,7 +62,7 @@ const config: Record<string, Config> = {
   '137': polygon,
   '42161': arbitrum,
   '12345': test,
-  '4002': fantom,
+  '4002': fantomTestnet,
   // @ts-ignore
   '17': docker
 };

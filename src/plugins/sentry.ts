@@ -13,7 +13,9 @@ const networkMap = {
   '1': 'mainnet',
   '42': 'kovan',
   '137': 'polygon',
-  '42161': 'arbitrum-one'
+  '42161': 'arbitrum-one',
+  '4002' : 'fantom',
+  '250' : 'fantom-mainnet'
 };
 const environment = `${ENV}-${networkMap[NETWORK]}`;
 const release = `frontend-v2@${version}`;

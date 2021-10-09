@@ -8,8 +8,8 @@ export enum Network {
   KOVAN = 42,
   POLYGON = 137,
   ARBITRUM = 42161,
-  FANTOM = 4002,
-  FANTOMMAINNET = 250
+  FANTOM = 250,
+  FANTOM_TESTNET = 4002
 }
 
 export const APP_NETWORK_ID = Number(process.env.VUE_APP_NETWORK) as NetworkId;

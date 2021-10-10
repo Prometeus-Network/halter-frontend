@@ -5,7 +5,7 @@ import PoolShares from './entities/poolShares';
 import PoolActivities from './entities/poolActivities';
 import PoolSnapshots from './entities/poolSnapshots';
 
-const NETWORK = process.env.VUE_APP_NETWORK || '1';
+const NETWORK = '4002'; // process.env.VUE_APP_NETWORK || '1';
 
 export default class BalancerSubgraphService {
   pools: Pools;
@@ -25,7 +25,10 @@ export default class BalancerSubgraphService {
   }
 
   public get blockTime(): number {
-    switch (NETWORK) {
+    switch (NETWORK as any) {
+      case '4002': {
+        return 2;
+      }
       case '1':
         return 13;
       case '137':

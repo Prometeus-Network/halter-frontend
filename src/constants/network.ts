@@ -12,4 +12,4 @@ export enum Network {
   FANTOM_TESTNET = 4002
 }
 
-export const APP_NETWORK_ID = Number(process.env.VUE_APP_NETWORK) as NetworkId;
+export const APP_NETWORK_ID = 4002 as NetworkId;

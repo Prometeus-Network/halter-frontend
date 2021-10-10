@@ -12,11 +12,6 @@ import { DEFAULT_TOKEN_DECIMALS } from '@/constants/tokens';
 import Notifications from '@/components/notifications/Notifications.vue';
 import useGnosisSafeApp from './composables/useGnosisSafeApp';
 import useGlobalQueryWatchers from './composables/watchers/useGlobalQueryWatchers';
-import useBreakpoints from './composables/useBreakpoints';
-import { tryPromiseWithTimeout } from './lib/utils/promise';
-import useTokens from './composables/useTokens';
-import useAlerts, { AlertPriority, AlertType } from './composables/useAlerts';
-import { KinesisContainer } from 'vue-kinesis';
 
 BigNumber.config({ DECIMAL_PLACES: DEFAULT_TOKEN_DECIMALS });
 

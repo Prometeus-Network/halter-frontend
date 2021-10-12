@@ -5,7 +5,7 @@ export const POOLS = {
   DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
   ZeroAddress: '0x0000000000000000000000000000000000000000',
   DynamicFees: {
-    Gauntlet: []
+    Gauntlet: ['']
   },
   BlockList: [''],
   Stable: {
@@ -15,7 +15,7 @@ export const POOLS = {
     ]
   },
   Investment: {
-    AllowList: []
+    AllowList: ['']
   },
   Factories: {
     '0x2dB05b4A7f92b536C419f821B5B716C14A1AE56a': 'weightedPool',

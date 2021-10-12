@@ -8,7 +8,7 @@ import { version } from '../../package.json';
 // https://github.com/getsentry/sentry-javascript/issues/2925
 
 const ENV = process.env.VUE_APP_ENV || 'development';
-const NETWORK = '4002'; /// process.env.VUE_APP_NETWORK || '42';
+const NETWORK = process.env.VUE_APP_NETWORK || '4002';
 const networkMap = {
   '1': 'mainnet',
   '42': 'kovan',

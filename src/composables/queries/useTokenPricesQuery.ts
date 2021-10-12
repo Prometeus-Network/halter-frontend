@@ -56,7 +56,11 @@ export default function useTokenPricesQuery(
         PER_PAGE * (page + 1)
       );
       console.log('Fetching', pageAddresses.length, 'prices');
-      console.log("Network in config: ", configService.network)
+      console.log("Network in config: ", configService.network);
+      console.log("addresses :", addresses);
+      console.log("coingeckoService: ", coingeckoService);
+      console.log("coingeckoService.client: ", coingeckoService.client)
+      console.log("coingeckoService.prices: ", coingeckoService.prices);
       prices = {
         ...prices,
         ...(await coingeckoService.prices.getTokens(pageAddresses))

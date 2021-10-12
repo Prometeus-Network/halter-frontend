@@ -60,7 +60,7 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
         'https://storageapi.fleek.co/tomafrench-team-bucket/arbitrum.listed.tokenlist.json',
       Vetted:
         'https://storageapi.fleek.co/tomafrench-team-bucket/arbitrum.vetted.tokenlist.json'
-    },    
+    },
     External: []
   },
   '4002': {
@@ -69,7 +69,7 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
         'https://storageapi.fleek.co/tomafrench-team-bucket/arbitrum.listed.tokenlist.json',
       Vetted:
         'https://storageapi.fleek.co/tomafrench-team-bucket/arbitrum.vetted.tokenlist.json'
-    },    
+    },
     External: []
   }
 };

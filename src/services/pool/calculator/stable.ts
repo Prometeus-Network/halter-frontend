@@ -4,7 +4,7 @@ import { parseUnits, formatUnits } from '@ethersproject/units';
 import { bnum } from '@/lib/utils';
 import BigNumber from 'bignumber.js';
 
-import { stableBPTForTokensZeroPriceImpact as _bptForTokensZeroPriceImpact } from '@balancer-labs/sor2';
+import { stableBPTForTokensZeroPriceImpact as _bptForTokensZeroPriceImpact } from '@prometeus-labs/halter-sor';
 import { BigNumberish } from '@ethersproject/bignumber';
 import * as SDK from '@georgeroman/balancer-v2-pools';
 

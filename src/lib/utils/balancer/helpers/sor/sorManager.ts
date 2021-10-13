@@ -6,7 +6,7 @@ import {
   SwapOptions,
   PoolFilter,
   bnum
-} from '@balancer-labs/sor2';
+} from '@prometeus-labs/halter-sor';
 import { SOR as SORV1 } from '@balancer-labs/sor';
 import { BaseProvider } from '@ethersproject/providers';
 import { AddressZero } from '@ethersproject/constants';

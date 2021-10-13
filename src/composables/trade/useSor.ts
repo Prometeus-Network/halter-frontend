@@ -11,7 +11,7 @@ import { useStore } from 'vuex';
 import { useIntervalFn } from '@vueuse/core';
 import { BigNumber } from 'bignumber.js';
 import { Pool } from '@balancer-labs/sor/dist/types';
-import { SubgraphPoolBase, SwapTypes } from '@balancer-labs/sor2';
+import { SubgraphPoolBase, SwapTypes } from '@prometeus-labs/halter-sor';
 import { useI18n } from 'vue-i18n';
 
 import { scale, bnum } from '@/lib/utils';

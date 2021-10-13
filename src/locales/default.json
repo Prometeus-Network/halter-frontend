@@ -229,6 +229,7 @@
   "tokenPills": {
     "hiddenTokens": "+{0} tokens"
   },
+  "tokenSearch": "Token search",
   "transactionAction": {
     "trade": "Trade",
     "approve": "Approve",

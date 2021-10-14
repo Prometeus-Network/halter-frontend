@@ -18,9 +18,9 @@ export const POOLS = {
     AllowList: ['']
   },
   Factories: {
-    '0x2dB05b4A7f92b536C419f821B5B716C14A1AE56a': 'weightedPool',
-    '0xae81DdCED2596a78a673e4ddb219e015181751de': 'stablePool',
-    '0x0012c1302825D917A60367F586587e7088D987f3': 'investmentPool',
-    '0x49645D390B04A970b5d957b9f6C78Cf8B8477D98': 'liquidityBootstrappingPool'
+    '0x2db05b4a7f92b536c419f821b5b716c14a1ae56a': 'weightedPool',
+    '0xae81ddced2596a78a673e4ddb219e015181751de': 'stablePool',
+    '0x0012c1302825d917a60367f586587e7088d987f3': 'investmentPool',
+    '0x49645d390b04a970b5d957b9f6c78cf8b8477d98': 'liquidityBootstrappingPool'
   }
 };

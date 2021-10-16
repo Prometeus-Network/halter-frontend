@@ -269,7 +269,7 @@ export default defineComponent({
     const poolTypeLabel = computed(() => {
       if (!pool.value) return '';
       const key = POOLS.Factories[pool.value.factory.toLowerCase()];
-      
+
       return key ? t(key) : t('unknownPoolType');
     });
 

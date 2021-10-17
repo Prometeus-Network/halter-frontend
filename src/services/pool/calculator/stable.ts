@@ -51,13 +51,18 @@ export default class Stable {
       this.scaleInput(tokenAmounts[i], priceRate)
     );
 
-    const bptIn = SDK.StableMath._calcBptInGivenExactTokensOut(
-      ampAdjusted,
-      this.scaledBalances,
-      amounts,
-      this.scaledPoolTotalSupply,
-      bnum(this.calc.poolSwapFee.toString())
-    );
+    let bptIn = new BigNumber(0);
+    try {
+      bptIn = SDK.StableMath._calcBptInGivenExactTokensOut(
+        ampAdjusted,
+        this.scaledBalances,
+        amounts,
+        this.scaledPoolTotalSupply,
+        bnum(this.calc.poolSwapFee.toString())
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     return this.scaleOutput(
       bptIn.toString(),
@@ -75,13 +80,18 @@ export default class Stable {
       return bnum('0');
     });
 
-    const bptIn = SDK.StableMath._calcBptInGivenExactTokensOut(
-      ampAdjusted,
-      this.scaledBalances,
-      amounts,
-      this.scaledPoolTotalSupply,
-      bnum(this.calc.poolSwapFee.toString())
-    );
+    let bptIn = new BigNumber(0);
+    try {
+      bptIn = SDK.StableMath._calcBptInGivenExactTokensOut(
+        ampAdjusted,
+        this.scaledBalances,
+        amounts,
+        this.scaledPoolTotalSupply,
+        bnum(this.calc.poolSwapFee.toString())
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     return this.scaleOutput(
       bptIn.toString(),

@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import HomePage from '@/pages/index.vue';
 import PoolPage from '@/pages/pool/_id.vue';
 import LiquidityMiningPage from '@/pages/liquidity-mining.vue';
+import ManageRewards from '@/pages/manage-rewards.vue';
 import TradePage from '@/pages/trade.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -30,6 +31,16 @@ const routes: RouteRecordRaw[] = [
     path: '/liquidity-mining',
     name: 'liquidity-mining',
     component: LiquidityMiningPage
+  },
+  {
+    path: '/stake',
+    name: 'stake',
+    component: HomePage
+  },
+  {
+    path: '/manage-rewards',
+    name: 'manage-rewards',
+    component: ManageRewards
   },
   {
     path: '/:pathMatch(.*)*',

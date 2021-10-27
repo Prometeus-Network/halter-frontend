@@ -117,8 +117,7 @@ export default defineComponent({
         Cell: 'tokenWeightCell',
         align: 'right',
         sortKey: pool => weightFor(pool.address),
-        width: 125,
-        hidden: !props.loading && isStableLikePool.value
+        width: 125
       },
       {
         name: t('balance'),

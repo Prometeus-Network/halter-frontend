@@ -32,7 +32,7 @@
           class="mb-3"
         />
         <div v-if="!isPolygon" class="text-sm text-gray-600 mb-1">
-          {{ $t('availableToClaim') }}
+          {{ $t('availableToClaim') }}:
         </div>
         <div v-if="!isPolygon" class="flex justify-between items-center mb-2">
           <div class="text-lg font-bold">

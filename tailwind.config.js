@@ -99,7 +99,8 @@ module.exports = {
           600: '#2e40f5',
           700: '#2436eb',
           800: '#1a2ce1',
-          900: '#1022d7'
+          900: '#1022d7',
+          denim: '#1B52EB'
         },
         pink: {
           50: '#ff4dff',
@@ -112,7 +113,8 @@ module.exports = {
           700: '#de07e2',
           800: '#d400d8',
           900: '#ca00ce'
-        }
+        },
+        purple: defaultTheme.colors.purple
       }
     }
   },

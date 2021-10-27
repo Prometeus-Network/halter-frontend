@@ -13,7 +13,7 @@
     <BalCard class="w-72" noBorder>
       <div class="grid grid-cols-1 gap-y-4">
         <div>
-          <div class="text-gray-500">{{ $t('totalRewards') }}</div>
+          <div class="text-gray-500">{{ $t('totalRewards') }}:</div>
           <div class="flex justify-between">
             <span class="font-semibold">{{ totalRewards }} HALT</span>
             <span>$ x.xx</span>

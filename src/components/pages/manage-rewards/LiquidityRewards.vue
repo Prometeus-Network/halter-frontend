@@ -4,7 +4,7 @@
       <div class="grid grid-cols-1 gap-y-8">
         <BalCard>
           <div class="grid grid-cols-1 gap-y-4">
-            <h4>{{ $t('availableToClaim') }}</h4>
+            <h3>{{ $t('availableToClaim') }}</h3>
             <div class="flex justify-between items-end">
               <span class="text-xl font-semibold text-purple-500">15 HALT</span>
               <span>$ 15.67</span>
@@ -17,7 +17,7 @@
         </BalCard>
         <BalCard>
           <div class="grid grid-cols-1 gap-y-4">
-            <h4>{{ $t('lockedRewards') }}</h4>
+            <h3>{{ $t('lockedRewards') }}</h3>
             <div class="flex justify-between items-end">
               <span class="text-xl font-semibold text-purple-500">15 HALT</span>
               <span>$ 15.67</span>
@@ -29,8 +29,29 @@
           </div>
         </BalCard>
       </div>
-      <BalCard>
-        3
+      <BalCard growContent>
+        <div class="grid grid-cols-2 h-full items-center justify-items-center">
+          <radial-progress-bar
+            diameter="350"
+            strokeLinecap="butt"
+            strokeWidth="20"
+            innerStrokeWidth="20"
+            startColor="#D742FF"
+            stopColor="#1B52EB"
+            innerStrokeColor="#E9E9F4"
+            :completed-steps="completedSteps"
+            :total-steps="totalSteps"
+          >
+            <div class="text-center">
+              <h3>{{ $t('totalRewards') }}</h3>
+              <div class="text-4xl font-semibold text-purple-500">
+                {{ totalRewards }} HALT
+              </div>
+              <div>$ 151.67</div>
+            </div>
+          </radial-progress-bar>
+          <div>legend</div>
+        </div>
       </BalCard>
     </div>
     <div class="grid gap-y-4">
@@ -48,22 +69,28 @@
 
 <script lang="ts">
 import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
+import RadialProgressBar from 'vue-radial-progress';
 import useUserRewardPoolsQuery from '@/composables/queries/useUserRewardPoolsQuery';
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 
 export default defineComponent({
   name: 'LiquidityRewards',
-  components: { PoolsTable },
+  components: { PoolsTable, RadialProgressBar },
 
   setup() {
     const {
-      data: userRewardPools,
+      data: userRewardPoolsData,
       isLoading: isLoadingUserRewardPools
     } = useUserRewardPoolsQuery();
 
+    const userRewardPools = computed(() => userRewardPoolsData.value ?? []);
+
     return {
       userRewardPools,
-      isLoadingUserRewardPools
+      isLoadingUserRewardPools,
+      completedSteps: 4,
+      totalSteps: 10,
+      totalRewards: 150
     };
   }
 });

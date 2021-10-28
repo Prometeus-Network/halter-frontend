@@ -40,11 +40,10 @@
 </template>
 
 <script lang="ts">
-import useRewards from '@/composables/useRewards';
 import useBreakpoints from '@/composables/useBreakpoints';
+import useRewards from '@/composables/useRewards';
 import useWeb3 from '@/services/web3/useWeb3';
 import { defineComponent } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'AppNavActivityBtn',
@@ -56,8 +55,7 @@ export default defineComponent({
      * COMPOSABLES
      */
     const { upToLargeBreakpoint } = useBreakpoints();
-    const { isLoadingProfile, profile, account, getSigner } = useWeb3();
-    const { t } = useI18n();
+    const { isLoadingProfile, profile, account } = useWeb3();
 
     const { total, claimable } = useRewards();
 

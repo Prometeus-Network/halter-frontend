@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import LiquidityRewards from '@/components/pages/manage-rewards/LiquidityRewards.vue';
-import { defineComponent, computed, watch, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export default defineComponent({

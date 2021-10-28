@@ -1,4 +1,3 @@
-import QUERY_KEYS from '@/constants/queryKeys';
 import { forChange } from '@/lib/utils';
 import { balancerSubgraphService } from '@/services/balancer/subgraph/balancer-subgraph.service';
 import useWeb3 from '@/services/web3/useWeb3';
@@ -17,9 +16,12 @@ export default function useUserRewardPoolsQuery(options: UseQueryOptions = {}) {
    */
   const { injectTokens, prices, dynamicDataLoading } = useTokens();
   const { loadingTokenLists } = useTokenLists();
-  const { data: liquidityMiningRewardsData } = useLiquidityMiningRewardsQuery(
-    []
-  );
+  const { data: liquidityMiningRewardsData } = useLiquidityMiningRewardsQuery([
+    0,
+    1,
+    2,
+    3
+  ]);
   const { account, isWalletReady } = useWeb3();
   const { currency } = useUserSettings();
 
@@ -41,14 +43,20 @@ export default function useUserRewardPoolsQuery(options: UseQueryOptions = {}) {
 
   const queryFn = async () => {
     const poolSharesIds =
-      liquidityMiningRewardsData.value?.map(reward => reward.poolId) ?? [];
+      liquidityMiningRewardsData.value?.byPool
+        .filter(reward => reward.stakedAmountLPT.gt(0))
+        .map(reward => reward.poolId) ?? [];
 
     const pools = await balancerSubgraphService.pools.get({
       where: {
         id_in: poolSharesIds
       }
     });
-
+    pools.forEach(pool => {
+      pool.claimableRewards = liquidityMiningRewardsData.value?.byPool.find(
+        item => item.poolId === pool.id
+      )?.claimableRewards;
+    });
     const tokens = flatten(pools.map(pool => pool.tokensList));
     await injectTokens(tokens);
     await forChange(dynamicDataLoading, false);
@@ -58,7 +66,6 @@ export default function useUserRewardPoolsQuery(options: UseQueryOptions = {}) {
       prices.value,
       currency.value
     );
-
     return decoratedPools;
   };
 

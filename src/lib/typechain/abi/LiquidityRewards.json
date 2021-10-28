@@ -16,6 +16,33 @@
 		"type": "constructor"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "prod1",
+				"type": "uint256"
+			}
+		],
+		"name": "PRBMath__MulDivFixedPointOverflow",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "prod1",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "denominator",
+				"type": "uint256"
+			}
+		],
+		"name": "PRBMath__MulDivOverflow",
+		"type": "error"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -34,6 +61,12 @@
 				"indexed": false,
 				"internalType": "uint256",
 				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "penaltyReward",
 				"type": "uint256"
 			}
 		],
@@ -133,25 +166,6 @@
 		],
 		"name": "Withdrawn",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_pid",
-				"type": "uint256"
-			}
-		],
-		"name": "calculateClaimableRewards",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
 	},
 	{
 		"inputs": [
@@ -291,12 +305,44 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getTotalPendingRewards",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_pid",
+				"type": "uint256"
+			}
+		],
+		"name": "getClaimableVestedRewardsForSpecificPool",
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "reward",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTotalClaimableVestedRewards",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "reward",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTotalRewardsAfterVestingForAllPools",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "totalReward",
 				"type": "uint256"
 			}
 		],

@@ -1,3 +1,5 @@
+import { BigNumber } from 'ethers';
+
 export type QueryArgs = Record<string, any>;
 export type QueryAttrs = Record<string, any>;
 export type QueryBuilder = (
@@ -37,6 +39,7 @@ export interface Pool {
   totalSwapVolume: string;
   hasLiquidityMiningRewards: boolean;
   onchain?: OnchainPoolData;
+  claimableRewards?: BigNumber;
   createTime: number;
 }
 

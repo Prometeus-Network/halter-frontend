@@ -124,6 +124,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    showEarnedRewards: {
+      type: Boolean,
+      default: false
+    },
     noPoolsLabel: {
       type: String,
       default: 'No pools'
@@ -163,6 +167,12 @@ export default defineComponent({
         accessor: 'id',
         Cell: 'poolNameCell',
         width: 350
+      },
+      {
+        name: 'Earned',
+        accessor: pool => pool.claimableRewards?.toString() ?? '',
+        id: 'earnedRewards',
+        hidden: !props.showEarnedRewards
       },
       {
         name: t('myBalance'),

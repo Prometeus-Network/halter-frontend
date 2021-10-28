@@ -11,11 +11,8 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-
-import useNumbers from '@/composables/useNumbers';
 import { DecoratedPool } from '@/services/balancer/subgraph/types';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   components: {},
@@ -26,7 +23,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    return {};
+    return { props };
   }
 });
 </script>

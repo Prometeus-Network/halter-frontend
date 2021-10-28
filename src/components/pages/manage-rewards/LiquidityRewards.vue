@@ -6,7 +6,9 @@
           <div class="grid grid-cols-1 gap-y-4">
             <h3>{{ $t('availableToClaim') }}</h3>
             <div class="flex justify-between items-end">
-              <span class="text-xl font-semibold text-purple-500">15 HALT</span>
+              <span class="text-xl font-semibold text-purple-500"
+                >{{ claimableRewards }} HALT</span
+              >
               <span>$ 15.67</span>
             </div>
             <BalBtn color="purple" outline>{{ $t('claim') }}</BalBtn>
@@ -19,7 +21,9 @@
           <div class="grid grid-cols-1 gap-y-4">
             <h3>{{ $t('lockedRewards') }}</h3>
             <div class="flex justify-between items-end">
-              <span class="text-xl font-semibold text-purple-500">15 HALT</span>
+              <span class="text-xl font-semibold text-purple-500"
+                >{{ lockedRewards }} HALT</span
+              >
               <span>$ 15.67</span>
             </div>
             <BalBtn color="purple" outline>{{ $t('claim') }}</BalBtn>
@@ -40,7 +44,7 @@
             stopColor="#1B52EB"
             innerStrokeColor="#E9E9F4"
             :completed-steps="completedSteps"
-            :total-steps="totalSteps"
+            total-steps="100"
           >
             <div class="text-center">
               <h3>{{ $t('totalRewards') }}</h3>
@@ -50,7 +54,12 @@
               <div>$ 151.67</div>
             </div>
           </radial-progress-bar>
-          <div>legend</div>
+          <div class="legend-grid">
+            <div class="w-8 h-8 gradient-purple-diagonal rounded-full"></div>
+            <div>{{ $t('availableToClaim') }}</div>
+            <div class="w-8 h-8 bg-purple-100 rounded-full"></div>
+            <div>{{ $t('lockedRewards') }}</div>
+          </div>
         </div>
       </BalCard>
     </div>
@@ -61,6 +70,7 @@
         :data="userRewardPools"
         :noPoolsLabel="$t('noInvestments')"
         showPoolShares
+        showEarnedRewards
         :selectedTokens="[]"
       />
     </div>
@@ -72,6 +82,8 @@ import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
 import RadialProgressBar from 'vue-radial-progress';
 import useUserRewardPoolsQuery from '@/composables/queries/useUserRewardPoolsQuery';
 import { defineComponent, computed } from 'vue';
+import useRewards from '@/composables/useRewards';
+import BigNumber from 'bignumber.js';
 
 export default defineComponent({
   name: 'LiquidityRewards',
@@ -82,15 +94,29 @@ export default defineComponent({
       data: userRewardPoolsData,
       isLoading: isLoadingUserRewardPools
     } = useUserRewardPoolsQuery();
+    const { total, claimable } = useRewards();
 
     const userRewardPools = computed(() => userRewardPoolsData.value ?? []);
+
+    const lockedRewards = computed(() => total.value.sub(claimable.value));
+
+    const completedSteps = computed(() => {
+      if (total.value.isZero()) {
+        return 0;
+      }
+      const claimableBn = new BigNumber(claimable.value.toString());
+      const totalBn = new BigNumber(total.value.toString());
+      const ratio = claimableBn.dividedBy(totalBn).times(100);
+      return ratio.gt(1) ? ratio.toNumber() : 0;
+    });
 
     return {
       userRewardPools,
       isLoadingUserRewardPools,
-      completedSteps: 4,
-      totalSteps: 10,
-      totalRewards: 150
+      claimableRewards: claimable,
+      totalRewards: total,
+      lockedRewards,
+      completedSteps
     };
   }
 });
@@ -101,5 +127,10 @@ export default defineComponent({
   @apply grid;
   grid-template-columns: 22rem 1fr;
   column-gap: 9rem;
+}
+
+.legend-grid {
+  @apply grid gap-8 items-center;
+  grid-template-columns: max-content 1fr;
 }
 </style>

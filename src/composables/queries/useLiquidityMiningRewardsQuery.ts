@@ -1,14 +1,11 @@
-import { reactive, computed, Ref } from 'vue';
-import { useQuery } from 'vue-query';
-import { UseQueryOptions } from 'react-query/types';
-import { Contract } from '@ethersproject/contracts';
-import LiquidityRewardsAbi from '@/lib/abi/LiquidityRewards.json';
-import { FETCH_ONCE_OPTIONS } from '@/constants/vue-query';
-
-import useWeb3 from '@/services/web3/useWeb3';
-import { configService } from '@/services/config/config.service';
-import { BigNumber } from '@ethersproject/bignumber';
 import { POOLS } from '@/constants/pools';
+import { FETCH_ONCE_OPTIONS } from '@/constants/vue-query';
+import { LiquidityRewards__factory } from '@/lib/typechain';
+import { configService } from '@/services/config/config.service';
+import useWeb3 from '@/services/web3/useWeb3';
+import { UseQueryOptions } from 'react-query/types';
+import { computed, reactive } from 'vue';
+import { useQuery } from 'vue-query';
 
 export default function useLiquidityMiningRewardsQuery(
   rewardPoolIds: number[],
@@ -24,13 +21,11 @@ export default function useLiquidityMiningRewardsQuery(
    */
   const enabled = computed(() => isWalletReady.value);
 
-  const vaultContract = computed(
-    () =>
-      new Contract(
-        configService.network.addresses.liquidityRewards,
-        LiquidityRewardsAbi,
-        getProvider()
-      )
+  const liquidityRewardContract = computed(() =>
+    LiquidityRewards__factory.connect(
+      configService.network.addresses.liquidityRewards,
+      getProvider()
+    )
   );
 
   /**
@@ -39,26 +34,34 @@ export default function useLiquidityMiningRewardsQuery(
   const queryKey = reactive(['liquidityMiningRewards', account, rewardPoolIds]);
 
   const queryFn = async () => {
-    return await Promise.all(
+    const totalRewards = await liquidityRewardContract.value.getTotalRewardsAfterVestingForAllPools();
+    const byPool = await Promise.all(
       rewardPoolIds.map(async rewardPoolId => {
-        const {
-          stakedAmountLPT,
-          claimedRewards
-        } = (await vaultContract.value.userPoolInfo(
-          account.value,
-          rewardPoolId
-        )) as {
-          stakedAmountLPT: BigNumber;
-          claimedRewards: number;
-        };
+        const [
+          { stakedAmountLPT, claimedRewards },
+          claimableRewards
+        ] = await Promise.all([
+          liquidityRewardContract.value.userPoolInfo(
+            account.value,
+            rewardPoolId
+          ),
+          liquidityRewardContract.value.getClaimableVestedRewardsForSpecificPool(
+            rewardPoolIds
+          )
+        ]);
         return {
           rewardPoolId,
           poolId: POOLS.Reward[rewardPoolId],
           stakedAmountLPT,
-          claimedRewards
+          claimedRewards,
+          claimableRewards
         };
       })
     );
+    return {
+      totalRewards,
+      byPool
+    };
   };
 
   const queryOptions = reactive({

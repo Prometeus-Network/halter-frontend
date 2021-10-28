@@ -36,7 +36,7 @@
     "wstETH": "",
     "lidoRelayer": "",
     "balancerHelpers": "0x1EEcF6462D7925CDf7FF629b2E633A274885da94",
-    "liquidityRewards": "0x35e0C481fedAB69C544249213FbaE6B0C34Dd248"
+    "liquidityRewards": "0xBD3A8Ff1E2daAAaDd7c5aBE96b59b84B988EABda"
   },
   "strategies": {
     "0": {

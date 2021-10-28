@@ -1,4 +1,5 @@
 import useLiquidityMiningRewardsQuery from '@/composables/queries/useLiquidityMiningRewardsQuery';
+import { BigNumber } from '@ethersproject/bignumber';
 import { computed } from 'vue-demi';
 
 export default function useRewards() {
@@ -9,8 +10,22 @@ export default function useRewards() {
     3
   ]);
 
+  const total = computed(
+    () =>
+      liquidityMiningRewardsQuery.data.value?.totalRewards ?? BigNumber.from(0)
+  );
+
+  const claimable = computed(
+    () =>
+      liquidityMiningRewardsQuery.data.value?.byPool.reduce(
+        (acc, value) => acc.add(value.claimableRewards),
+        BigNumber.from(0)
+      ) ?? BigNumber.from(0)
+  );
+
   return {
-    total: 150,
-    claimable: 15
+    total,
+    claimable,
+    byPool: computed(() => liquidityMiningRewardsQuery.data.value?.byPool ?? [])
   };
 }

@@ -30,11 +30,13 @@
     "vault": "0xe8Ff274dEB1610177659D73967BAf4BCb5f800Ff",
     "weightedPoolFactory": "0x2dB05b4A7f92b536C419f821B5B716C14A1AE56a",
     "stablePoolFactory": "0xae81DdCED2596a78a673e4ddb219e015181751de",
+    "halt": "",
     "weth": "0x1EF81Cc9040A7bf316EeD03BcAe56EdC645E1425",
     "stETH": "",
     "wstETH": "",
     "lidoRelayer": "",
-    "balancerHelpers": "0x1EEcF6462D7925CDf7FF629b2E633A274885da94"
+    "balancerHelpers": "0x1EEcF6462D7925CDf7FF629b2E633A274885da94",
+    "liquidityRewards": "0xBD3A8Ff1E2daAAaDd7c5aBE96b59b84B988EABda"
   },
   "strategies": {
     "0": {

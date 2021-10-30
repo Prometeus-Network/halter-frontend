@@ -55,7 +55,8 @@ export default defineComponent({
           'gray',
           'red',
           'white',
-          'blue'
+          'blue',
+          'purple'
         ].includes(val)
     },
     label: { type: String, default: '' },
@@ -101,8 +102,8 @@ export default defineComponent({
     const bgGradientClasses = computed(() => {
       if (props.outline) return 'bg-transparent';
 
-      let fromColor = 'blue';
-      let toColor = 'pink';
+      let fromColor = 'pink';
+      let toColor = 'blue';
 
       if (props.color === 'gradient-reverse') {
         fromColor = 'pink';
@@ -116,10 +117,10 @@ export default defineComponent({
         return `bg-gray-300 dark:bg-gray-700 text-white dark:text-gray-500`;
       }
       if (props.loading) {
-        return `bg-gradient-to-tr from-${fromColor}-50 to-${toColor}-50`;
+        return `bg-gradient-to-br from-${fromColor}-50 to-${toColor}-50`;
       }
       return `
-        bg-gradient-to-tr from-${fromColor}-500 to-${toColor}-500
+        bg-gradient-to-br from-${fromColor}-500 to-${toColor}-500
         hover:from-${fromColor}-600 hover:to-${toColor}-600
       `;
     });
@@ -154,7 +155,7 @@ export default defineComponent({
 
     const borderClasses = computed(() => {
       if (props.outline)
-        return `border border-${props.color}-200 dark:border-${props.color}-700`;
+        return `border border-${props.color}-500 dark:border-${props.color}-700`;
       return 'border-none';
     });
 

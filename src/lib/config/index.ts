@@ -1,10 +1,4 @@
-import homestead from './homestead.json';
-import kovan from './kovan.json';
-import rinkeby from './rinkeby.json';
-import polygon from './polygon.json';
-import arbitrum from './arbitrum.json';
 import docker from './docker.json';
-import test from './test.json';
 import fantomTestnet from './testnet.json';
 
 export interface Config {
@@ -45,6 +39,7 @@ export interface Config {
     wstETH: string;
     lidoRelayer: string;
     balancerHelpers: string;
+    liquidityRewards: string;
   };
   strategies: Record<
     string,
@@ -56,12 +51,12 @@ export interface Config {
 }
 
 const config: Record<string, Config> = {
-  '1': homestead,
-  '42': kovan,
-  '4': rinkeby,
-  '137': polygon,
-  '42161': arbitrum,
-  '12345': test,
+  // '1': homestead,
+  // '42': kovan,
+  // '4': rinkeby,
+  // '137': polygon,
+  // '42161': arbitrum,
+  // '12345': test,
   '4002': fantomTestnet,
   // @ts-ignore
   '17': docker

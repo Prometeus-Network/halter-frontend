@@ -1,25 +1,31 @@
 <template>
-  <div :class="`app-nav-toggle bg-gray-50 dark:bg-gray-${darkModeBg}`">
-    <router-link
-      :to="{ name: 'home' }"
-      :class="[
-        'toggle-link px-6 rounded-l-lg',
-        { [activeClasses]: !isTradePage }
-      ]"
-      @click="trackGoal(Goals.ClickNavInvest)"
-    >
-      {{ $t('invest') }}
-    </router-link>
-    <router-link
-      :to="{ name: 'trade' }"
+  <div :class="`app-nav-toggle-wrapper gradient-purple-diagonal`">
+    <div :class="`app-nav-toggle bg-gray-50 dark:bg-gray-${darkModeBg}`">
+      <router-link
+        :to="{ name: 'home' }"
+        :class="['toggle-link', { [activeClasses]: !isTradePage }]"
+        @click="trackGoal(Goals.ClickNavInvest)"
+      >
+        {{ $t('invest') }}
+      </router-link>
+      <router-link
+        :to="{ name: 'trade' }"
+        :class="['toggle-link', { [activeClasses]: isTradePage }]"
+        @click="trackGoal(Goals.ClickNavTrade)"
+      >
+        {{ $t('trade') }}
+      </router-link>
+      <!-- <router-link
+      :to="{ name: 'stake' }"
       :class="[
         'toggle-link px-6 rounded-r-lg',
         { [activeClasses]: isTradePage }
       ]"
       @click="trackGoal(Goals.ClickNavTrade)"
     >
-      {{ $t('trade') }}
-    </router-link>
+      {{ $t('stake') }}
+    </router-link> -->
+    </div>
   </div>
 </template>
 
@@ -37,7 +43,7 @@ export default defineComponent({
 
   setup() {
     const route = useRoute();
-    const activeClasses = 'gradient-blue-l-to-r text-white rounded-lg';
+    const activeClasses = 'gradient-purple-diagonal text-white';
     const isTradePage = computed(() => route.name === 'trade');
     const { trackGoal, Goals } = useFathom();
 
@@ -52,12 +58,19 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.app-nav-toggle-wrapper {
+  padding: 1px;
+  border-radius: 1.5rem;
+}
+
 .app-nav-toggle {
-  @apply h-10 flex items-center rounded-lg shadow;
+  @apply h-10 flex items-center shadow;
+  border-radius: 1.25rem;
   font-variation-settings: 'wght' 600;
 }
 
 .toggle-link {
-  @apply h-full flex items-center;
+  @apply h-full flex items-center  px-6;
+  border-radius: 1.25rem;
 }
 </style>

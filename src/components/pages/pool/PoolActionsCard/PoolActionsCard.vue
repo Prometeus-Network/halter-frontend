@@ -40,19 +40,26 @@
       </template>
     </div>
   </BalCard>
+  <template v-if="shouldShowRewardsBlock">
+    <PoolRewardsCard :pool="pool" class="mt-8" />
+  </template>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import SuccessOverlay from '@/components/cards/SuccessOverlay.vue';
 import InvestForm from '@/components/forms/pool_actions/InvestForm.vue';
 import WithdrawForm from '@/components/forms/pool_actions/WithdrawForm.vue';
-import SuccessOverlay from '@/components/cards/SuccessOverlay.vue';
-import { useI18n } from 'vue-i18n';
 import TradeSettingsPopover, {
   TradeSettingsContext
 } from '@/components/popovers/TradeSettingsPopover.vue';
 import useFathom from '@/composables/useFathom';
+import useTokens from '@/composables/useTokens';
+import { POOLS } from '@/constants/pools';
+import { FullPool } from '@/services/balancer/subgraph/types';
 import useWeb3 from '@/services/web3/useWeb3';
+import { computed, defineComponent, PropType, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import PoolRewardsCard from '../PoolRewardsCard.vue';
 
 export default defineComponent({
   name: 'PoolActionsCard',
@@ -63,21 +70,23 @@ export default defineComponent({
     InvestForm,
     WithdrawForm,
     SuccessOverlay,
-    TradeSettingsPopover
+    TradeSettingsPopover,
+    PoolRewardsCard
   },
 
   props: {
-    pool: { type: Object, required: true },
+    pool: { type: Object as PropType<FullPool>, required: true },
     missingPrices: { type: Boolean, default: false }
   },
 
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     /**
      * COMPOSABLES
      */
     const { t } = useI18n();
     const { trackGoal, Goals } = useFathom();
     const { explorerLinks: explorer } = useWeb3();
+    const { balanceFor } = useTokens();
 
     /**
      * STATE
@@ -90,6 +99,11 @@ export default defineComponent({
     const investmentSuccess = ref(false);
     const withdrawalSuccess = ref(false);
     const txHash = ref('');
+    const shouldShowRewardsBlock = computed(
+      () =>
+        Number(balanceFor(props.pool.address)) !== 0 &&
+        POOLS.Reward.includes(props.pool.id)
+    );
 
     /**
      * METHODS
@@ -116,6 +130,7 @@ export default defineComponent({
       withdrawalSuccess,
       txHash,
       TradeSettingsContext,
+      shouldShowRewardsBlock,
       // methods
       handleInvestment,
       handleWithdrawal,

@@ -37,7 +37,8 @@
   "approvingGnosisRelayer": "Approving Gnosis relayer",
   "approvingLidoRelayer": "Approving Lido relayer",
   "apr": "APR",
-  "availableToClaim": "Available to claim:",
+  "availableToClaim": "Available to claim",
+  "availableToClaimWarning": "You can withdraw your available to claim rewards anytime without any fee",
   "balance": "Balance",
   "balances": "Balances",
   "best": "Best",
@@ -87,6 +88,7 @@
   "details": "Details",
   "dynamicSwapFeeLabel": "Dynamic swap fees: Currently <b>{0}</b>",
   "earnBAL": "Earn BAL when swapping eligible tokens",
+  "earnRewards": "Earn rewards",
   "editoAbout": "Earn more on your Ethereum-based assets. Add tokens to pools and earn compounding fees when people trade on the exchange utilizing your liquidity.",
   "editoTitle": "Put your money to work",
   "effectivePrice": "Effective price:",
@@ -161,6 +163,8 @@
   "language": "Language",
   "learnMore": "Learn more",
   "light": "Light",
+  "linearVestingDisclaimerBody": "Rewards can be claimed with 50% fee if you decide to get it earlier",
+  "linearVestingDisclaimerTitle": "2 months linear vested rewards",
   "liquidityBootstrappingPool": "Liquidity Bootstrapping Pool",
   "liquidityMining": "Liquidity mining",
   "liquidityMiningAPR": "Liquidity Mining APR",
@@ -168,9 +172,13 @@
   "loadMore": "Load more",
   "loading": "Loading...",
   "loadingBestPrice": "Looking for the best price...",
+  "lockedRewards": "Locked rewards",
+  "lockedRewardsWarning": "You can withdraw your locked rewards anytime with 50% fee",
   "logOut": "Log out",
   "lpsEarnFee": "<span>LPs earn <b>{0}</b> in fees</span>",
   "manageLists": "Manage lists",
+  "manageRewards": "Manage rewards",
+  "manageYourRewards": "Manage your rewards",
   "marketConditionsWarning": "Market conditions may change between the time your order is submitted and the time it gets executed on Ethereum. Slippage tolerance is the maximum change in price you are willing to accept. This protects you from front-running bots and miner extractable value (MEV).",
   "max": "Max",
   "maxed": "Maxed",
@@ -273,6 +281,8 @@
   "singleTokenMax": "Single token max",
   "slippageTolerance": "Slippage tolerance",
   "stablePool": "Stable pool",
+  "stake": "Stake",
+  "stakingRewards": "Staking rewards",
   "strategy": "Strategy",
   "summary": "Summary",
   "swap": "Swap",
@@ -300,6 +310,7 @@
   "tokensLowerCase": "tokens",
   "tokensParen": "Token(s)",
   "totalAPR": "Total APR",
+  "totalRewards": "Total rewards",
   "totalSupply": "Total supply",
   "totalValue": "Total value",
   "trade": "Trade",
@@ -358,6 +369,7 @@
       "tradeFees": "Wrap fees"
     }
   },
+  "tradingRewards": "Trading rewards",
   "transactionAction": {
     "approve": "Approve",
     "claim": "Claim",
@@ -386,7 +398,8 @@
     "claimBAL": "{0} BAL",
     "investInPool": "{0} in {1}",
     "withdrawFromPool": "{0} from {1}",
-    "wrapUnwrap": "{0} {1} to {2}"
+    "wrapUnwrap": "{0} {1} to {2}",
+    "deposit": "Deposit to reward contract"
   },
   "transactionType": "Transaction type",
   "transactionTypesTooltips": {
@@ -441,5 +454,6 @@
   "wrapStEthTooltip": "This pool requires Wrapped Liquid Staked ETH 2.0 (wstETH). To maximize your investment, you could wrap some additional stETH.",
   "yearAbbrev": "y",
   "youDidIt": "You did it!",
+  "yourRewardPools": "Your reward pools",
   "yourTransactions": "Your transactions in this pool"
 }

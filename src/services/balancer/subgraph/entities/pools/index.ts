@@ -1,28 +1,28 @@
-import Service from '../../balancer-subgraph.service';
-import queryBuilder from './query';
-import { bnum } from '@/lib/utils';
-import {
-  Pool,
-  QueryBuilder,
-  TimeTravelPeriod,
-  DecoratedPool,
-  PoolToken
-} from '../../types';
-import { getAddress } from '@ethersproject/address';
-import {
-  currentLiquidityMiningRewards,
-  computeTotalAPRForPool,
-  computeAPRsForPool
-} from '@/lib/utils/liquidityMining';
-import { NetworkId } from '@/constants/network';
-import { configService as _configService } from '@/services/config/config.service';
-import { TokenPrices } from '@/services/coingecko/api/price.service';
-import { FiatCurrency } from '@/constants/currency';
 import { isStable, isWstETH } from '@/composables/usePool';
 import { oneSecondInMs, twentyFourHoursInSecs } from '@/composables/useTime';
+import { FiatCurrency } from '@/constants/currency';
+import { NetworkId } from '@/constants/network';
+import { bnum } from '@/lib/utils';
+import {
+  computeAPRsForPool,
+  computeTotalAPRForPool,
+  currentLiquidityMiningRewards
+} from '@/lib/utils/liquidityMining';
+import { TokenPrices } from '@/services/coingecko/api/price.service';
+import { configService as _configService } from '@/services/config/config.service';
 import { lidoService } from '@/services/lido/lido.service';
 import PoolService from '@/services/pool/pool.service';
+import { getAddress } from '@ethersproject/address';
 import { differenceInWeeks } from 'date-fns';
+import Service from '../../balancer-subgraph.service';
+import {
+  DecoratedPool,
+  Pool,
+  PoolToken,
+  QueryBuilder,
+  TimeTravelPeriod
+} from '../../types';
+import queryBuilder from './query';
 
 const IS_LIQUIDITY_MINING_ENABLED = true;
 

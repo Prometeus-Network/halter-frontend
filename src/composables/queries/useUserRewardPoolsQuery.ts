@@ -16,12 +16,9 @@ export default function useUserRewardPoolsQuery(options: UseQueryOptions = {}) {
    */
   const { injectTokens, prices, dynamicDataLoading } = useTokens();
   const { loadingTokenLists } = useTokenLists();
-  const { data: liquidityMiningRewardsData } = useLiquidityMiningRewardsQuery([
-    0,
-    1,
-    2,
-    3
-  ]);
+  const { data: liquidityMiningRewardsData } = useLiquidityMiningRewardsQuery(
+    []
+  );
   const { account, isWalletReady } = useWeb3();
   const { currency } = useUserSettings();
 

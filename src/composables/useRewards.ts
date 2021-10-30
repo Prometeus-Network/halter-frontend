@@ -2,13 +2,8 @@ import useLiquidityMiningRewardsQuery from '@/composables/queries/useLiquidityMi
 import { BigNumber } from '@ethersproject/bignumber';
 import { computed } from 'vue-demi';
 
-export default function useRewards() {
-  const liquidityMiningRewardsQuery = useLiquidityMiningRewardsQuery([
-    0,
-    1,
-    2,
-    3
-  ]);
+export default function useRewards(poolIds: string[] = []) {
+  const liquidityMiningRewardsQuery = useLiquidityMiningRewardsQuery(poolIds);
 
   const total = computed(
     () =>

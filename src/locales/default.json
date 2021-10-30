@@ -398,7 +398,8 @@
     "claimBAL": "{0} BAL",
     "investInPool": "{0} in {1}",
     "withdrawFromPool": "{0} from {1}",
-    "wrapUnwrap": "{0} {1} to {2}"
+    "wrapUnwrap": "{0} {1} to {2}",
+    "deposit": "Deposit to reward contract"
   },
   "transactionType": "Transaction type",
   "transactionTypesTooltips": {

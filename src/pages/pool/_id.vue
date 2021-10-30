@@ -118,7 +118,6 @@
           @on-tx="onNewTx"
           class="pool-actions-card"
         />
-        <PoolRewardsCard :pool="pool" class="mt-8" />
       </div>
       <div v-else class="order-1 lg:order-2 px-1 lg:px-0">
         <BalCard noPad imgSrc="/images/partners/copper-launch.png">

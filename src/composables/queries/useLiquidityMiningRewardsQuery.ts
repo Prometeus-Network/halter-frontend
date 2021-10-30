@@ -1,32 +1,33 @@
 import { POOLS } from '@/constants/pools';
 import { FETCH_ONCE_OPTIONS } from '@/constants/vue-query';
-import { LiquidityRewards__factory } from '@/lib/typechain';
-import { configService } from '@/services/config/config.service';
 import useWeb3 from '@/services/web3/useWeb3';
 import { UseQueryOptions } from 'react-query/types';
 import { computed, reactive } from 'vue';
 import { useQuery } from 'vue-query';
+import useLiquidityRewardsContract from '../useLiquidityRewardsContract';
+
+export function poolIdToRewardPoolId(...poolIds: string[]) {
+  return (poolIds.length ? poolIds : POOLS.Reward)
+    .map(poolId => POOLS.Reward.indexOf(poolId))
+    .filter(index => index !== -1);
+}
 
 export default function useLiquidityMiningRewardsQuery(
-  rewardPoolIds: number[],
+  poolIds: string[],
   options: UseQueryOptions = {}
 ) {
   /**
    * COMPOSABLES
    */
-  const { getProvider, account, isWalletReady } = useWeb3();
+  const { account, isWalletReady } = useWeb3();
 
   /**
    * COMPUTED
    */
   const enabled = computed(() => isWalletReady.value);
+  const rewardPoolIds = computed(() => poolIdToRewardPoolId(...poolIds));
 
-  const liquidityRewardContract = computed(() =>
-    LiquidityRewards__factory.connect(
-      configService.network.addresses.liquidityRewards,
-      getProvider()
-    )
-  );
+  const liquidityRewardContract = useLiquidityRewardsContract();
 
   /**
    * QUERY INPUTS
@@ -36,7 +37,7 @@ export default function useLiquidityMiningRewardsQuery(
   const queryFn = async () => {
     const totalRewards = await liquidityRewardContract.value.getTotalRewardsAfterVestingForAllPools();
     const byPool = await Promise.all(
-      rewardPoolIds.map(async rewardPoolId => {
+      rewardPoolIds.value.map(async rewardPoolId => {
         const [
           { stakedAmountLPT, claimedRewards },
           claimableRewards
@@ -46,7 +47,7 @@ export default function useLiquidityMiningRewardsQuery(
             rewardPoolId
           ),
           liquidityRewardContract.value.getClaimableVestedRewardsForSpecificPool(
-            rewardPoolIds
+            rewardPoolId
           )
         ]);
         return {

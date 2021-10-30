@@ -169,10 +169,11 @@ export default defineComponent({
 }
 
 select {
-  @apply absolute w-full h-full leading-loose bg-transparent leading-none -ml-px pt-4;
+  @apply absolute w-full h-full leading-loose bg-transparent leading-none -ml-px;
   -webkit-appearance: none;
   -moz-appearance: none;
   text-indent: 1px;
   text-overflow: '';
+  cursor: pointer;
 }
 </style>

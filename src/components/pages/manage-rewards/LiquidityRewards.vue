@@ -7,7 +7,7 @@
             <h3>{{ $t('availableToClaim') }}</h3>
             <div class="flex justify-between items-end">
               <span class="text-xl font-semibold text-purple-500"
-                >{{ claimableRewards }} HALT</span
+                >{{ formatToken(claimableRewards) }} HALT</span
               >
               <span>$ 15.67</span>
             </div>
@@ -22,7 +22,7 @@
             <h3>{{ $t('lockedRewards') }}</h3>
             <div class="flex justify-between items-end">
               <span class="text-xl font-semibold text-purple-500"
-                >{{ lockedRewards }} HALT</span
+                >{{ formatToken(lockedRewards) }} HALT</span
               >
               <span>$ 15.67</span>
             </div>
@@ -49,7 +49,7 @@
             <div class="text-center">
               <h3>{{ $t('totalRewards') }}</h3>
               <div class="text-4xl font-semibold text-purple-500">
-                {{ totalRewards }} HALT
+                {{ formatToken(totalRewards) }} HALT
               </div>
               <div>$ 151.67</div>
             </div>
@@ -84,6 +84,7 @@ import useUserRewardPoolsQuery from '@/composables/queries/useUserRewardPoolsQue
 import { defineComponent, computed } from 'vue';
 import useRewards from '@/composables/useRewards';
 import BigNumber from 'bignumber.js';
+import useNumbers from '@/composables/useNumbers';
 
 export default defineComponent({
   name: 'LiquidityRewards',
@@ -95,13 +96,16 @@ export default defineComponent({
       isLoading: isLoadingUserRewardPools
     } = useUserRewardPoolsQuery();
     const { total, claimable } = useRewards();
+    const { fNum } = useNumbers();
 
     const userRewardPools = computed(() => userRewardPoolsData.value ?? []);
 
-    const lockedRewards = computed(() => total.value.sub(claimable.value));
+    const lockedRewards = computed(() =>
+      new BigNumber(total.value).minus(claimable.value)
+    );
 
     const completedSteps = computed(() => {
-      if (total.value.isZero()) {
+      if (total.value === '0.0') {
         return 0;
       }
       const claimableBn = new BigNumber(claimable.value.toString());
@@ -110,7 +114,10 @@ export default defineComponent({
       return ratio.gt(1) ? ratio.toNumber() : 0;
     });
 
+    const formatToken = (amount: string) => fNum(amount, 'token');
+
     return {
+      formatToken,
       userRewardPools,
       isLoadingUserRewardPools,
       claimableRewards: claimable,

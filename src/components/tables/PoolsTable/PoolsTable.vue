@@ -100,6 +100,7 @@ import { ColumnDefinition } from '@/components/_global/BalTable/BalTable.vue';
 import useDarkMode from '@/composables/useDarkMode';
 import useBreakpoints from '@/composables/useBreakpoints';
 import { isStableLike } from '@/composables/usePool';
+import { formatUnits } from '@ethersproject/units';
 
 export default defineComponent({
   components: {
@@ -170,7 +171,11 @@ export default defineComponent({
       },
       {
         name: 'Earned',
-        accessor: pool => pool.claimableRewards?.toString() ?? '',
+        accessor: pool =>
+          fNum(
+            formatUnits(pool.claimableRewards?.toString() ?? '0', 18),
+            'token'
+          ),
         id: 'earnedRewards',
         hidden: !props.showEarnedRewards
       },

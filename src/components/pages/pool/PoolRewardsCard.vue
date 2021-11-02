@@ -55,7 +55,7 @@ export default defineComponent({
 
       try {
         const tx = await liquidityRewardContract.value.depositLPT(
-          1,
+          pid,
           parsedAmount
         );
 

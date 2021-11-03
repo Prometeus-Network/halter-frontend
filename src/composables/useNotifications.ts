@@ -49,6 +49,15 @@ function addNotification(newNotification: NewNotification) {
   return notificationId;
 }
 
+function addErrorNotification(message: string, override?: NewNotification) {
+  return addNotification({
+    type: 'error',
+    title: 'Something went wrong',
+    message,
+    ...override
+  });
+}
+
 function attemptToRemoveExistingNotification(newNotification: NewNotification) {
   if (newNotification.transactionMetadata?.id) {
     const previousNotificationFound = notifications.value.find(
@@ -107,6 +116,7 @@ export default function useNotifications() {
   return {
     // methods
     addNotification,
+    addErrorNotification,
     getNotification,
     updateNotification,
     clearAllNotifications,

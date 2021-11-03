@@ -141,6 +141,16 @@
       </template>
     </div>
   </BalForm>
+  <teleport to="#modal">
+    <transactions-preview-modal
+      v-if="modalTransactionsPreviewIsOpen"
+      :transactions="transactions"
+      @close="modalTransactionsPreviewIsOpen = false"
+      @success="modalTransactionsPreviewIsOpen = false"
+    >
+      {{ $t('withdrawTokensWarning') }}
+    </transactions-preview-modal>
+  </teleport>
 </template>
 
 <script lang="ts">
@@ -182,6 +192,12 @@ import useEthers from '@/composables/useEthers';
 import useTransactions from '@/composables/useTransactions';
 import { usePool } from '@/composables/usePool';
 import TokenInput from '@/components/inputs/TokenInput/TokenInput.vue';
+import TransactionsPreviewModal, {
+  Transaction
+} from '@/components/modals/TransactionsPreviewModal.vue';
+import useRewards from '@/composables/useRewards';
+import useLiquidityRewardsContract from '@/composables/useLiquidityRewardsContract';
+import useNotifications from '@/composables/useNotifications';
 
 export enum FormTypes {
   proportional = 'proportional',
@@ -193,7 +209,8 @@ export default defineComponent({
 
   components: {
     FormTypeToggle,
-    TokenInput
+    TokenInput,
+    TransactionsPreviewModal
   },
 
   emits: ['success'],
@@ -233,7 +250,10 @@ export default defineComponent({
     const { trackGoal, Goals } = useFathom();
     const { txListener } = useEthers();
     const { addTransaction } = useTransactions();
+    const { addErrorNotification } = useNotifications();
     const { isStableLikePool } = usePool(toRef(props, 'pool'));
+    const { byPool } = useRewards([props.pool.id]);
+    const liquidityRewardsContract = useLiquidityRewardsContract();
 
     // SERVICES
     const poolExchange = computed(
@@ -411,6 +431,9 @@ export default defineComponent({
       }
     ]);
 
+    const transactions = ref<Transaction[]>([]);
+    const modalTransactionsPreviewIsOpen = ref(false);
+
     // METHODS
     function tokenDecimals(index) {
       return tokens.value[props.pool.tokenAddresses[index]].decimals;
@@ -493,8 +516,7 @@ export default defineComponent({
       console.log('bptIn (JS)', bptIn.value);
     }
 
-    async function submit(): Promise<void> {
-      if (!data.withdrawForm.validate()) return;
+    async function withdraw() {
       try {
         data.loading = true;
         await calcBptIn();
@@ -536,6 +558,47 @@ export default defineComponent({
       } catch (error) {
         console.error(error);
         data.loading = false;
+      }
+    }
+
+    async function submit(): Promise<void> {
+      if (!data.withdrawForm.validate()) return;
+      if (!byPool.value[0].stakedAmountLPT.isZero()) {
+        transactions.value = [
+          {
+            title: t('stopEarningRewards'),
+            handler: async () => {
+              try {
+                const tx = await liquidityRewardsContract.value.withdrawLPT(
+                  byPool.value[0].rewardPoolId,
+                  byPool.value[0].stakedAmountLPT
+                );
+
+                addTransaction({
+                  id: tx.hash,
+                  type: 'tx',
+                  action: 'withdraw',
+                  summary: t('transactionSummary.withdraw'),
+                  details: {
+                    contractAddress: liquidityRewardsContract.value.address
+                  }
+                });
+              } catch (error) {
+                addErrorNotification((error as any)?.data.message);
+                console.error(error);
+              }
+            }
+          },
+          {
+            title: t('withdrawTokens'),
+            handler: async () => {
+              await withdraw();
+            }
+          }
+        ];
+        modalTransactionsPreviewIsOpen.value = true;
+      } else {
+        await withdraw();
       }
     }
 
@@ -609,6 +672,8 @@ export default defineComponent({
       isWalletReady,
       isMismatchedNetwork,
       toggleWalletSelectModal,
+      transactions,
+      modalTransactionsPreviewIsOpen,
       total,
       isProportional,
       isSingleAsset,

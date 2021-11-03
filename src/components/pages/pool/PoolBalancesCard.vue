@@ -56,16 +56,15 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, toRefs, computed, Ref } from 'vue';
-import useNumbers from '@/composables/useNumbers';
-import { useI18n } from 'vue-i18n';
-import { FullPool } from '@/services/balancer/subgraph/types';
-import numeral from 'numeral';
-import { shortenLabel } from '@/lib/utils';
-import useWeb3 from '@/services/web3/useWeb3';
 import useBreakpoints from '@/composables/useBreakpoints';
+import useNumbers from '@/composables/useNumbers';
 import useTokens from '@/composables/useTokens';
-import { usePool } from '@/composables/usePool';
+import { shortenLabel } from '@/lib/utils';
+import { FullPool } from '@/services/balancer/subgraph/types';
+import useWeb3 from '@/services/web3/useWeb3';
+import numeral from 'numeral';
+import { computed, defineComponent, PropType, Ref, toRefs } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   props: {
@@ -89,7 +88,6 @@ export default defineComponent({
     const { t } = useI18n();
     const { upToLargeBreakpoint } = useBreakpoints();
     const { priceFor } = useTokens();
-    const { isStableLikePool } = usePool(pool);
 
     /**
      * COMPUTED

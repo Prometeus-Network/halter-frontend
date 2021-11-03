@@ -32,7 +32,11 @@ export default function useLiquidityMiningRewardsQuery(
   /**
    * QUERY INPUTS
    */
-  const queryKey = reactive(['liquidityMiningRewards', account, rewardPoolIds]);
+  const queryKey = reactive([
+    'liquidityMiningRewards',
+    account,
+    rewardPoolIds.value
+  ]);
 
   const queryFn = async () => {
     const totalRewards = await liquidityRewardContract.value.getTotalRewardsAfterVestingForAllPools();

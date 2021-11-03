@@ -44,9 +44,9 @@ export default defineComponent({
       approving,
       approvedAll
     } = useTokenApprovals([props.pool.address], lpTokenBalances);
-    const liquidityRewardContract = useLiquidityRewardsContract();
+    const liquidityRewardsContract = useLiquidityRewardsContract();
     const { addTransaction } = useTransactions();
-    const { addNotification } = useNotifications();
+    const { addErrorNotification } = useNotifications();
     const { t } = useI18n();
 
     const depositLptMutation = useMutation(async () => {
@@ -54,7 +54,7 @@ export default defineComponent({
       const parsedAmount = parseUnits(lpTokenBalances.value[0], 18);
 
       try {
-        const tx = await liquidityRewardContract.value.depositLPT(
+        const tx = await liquidityRewardsContract.value.depositLPT(
           pid,
           parsedAmount
         );
@@ -65,15 +65,11 @@ export default defineComponent({
           action: 'deposit',
           summary: t('transactionSummary.deposit'),
           details: {
-            contractAddress: liquidityRewardContract.value.address
+            contractAddress: liquidityRewardsContract.value.address
           }
         });
       } catch (error) {
-        addNotification({
-          type: 'error',
-          title: 'Something went wrong',
-          message: (error as any)?.data.message
-        });
+        addErrorNotification((error as any)?.data.message);
         console.error(error);
       }
     });

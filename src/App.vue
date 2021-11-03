@@ -1,22 +1,17 @@
 <script lang="ts">
-import { defineComponent, onBeforeMount, watch, ref } from 'vue';
-import { VueQueryDevTools } from 'vue-query/devtools';
-import { useStore } from 'vuex';
-import { useRoute } from 'vue-router';
-import BigNumber from 'bignumber.js';
 import * as Layouts from '@/components/layouts';
-import useWeb3Watchers from '@/composables/watchers/useWeb3Watchers';
-import WalletSelectModal from '@/components/web3/WalletSelectModal.vue';
-import useWeb3 from '@/services/web3/useWeb3';
-import { DEFAULT_TOKEN_DECIMALS } from '@/constants/tokens';
 import Notifications from '@/components/notifications/Notifications.vue';
+import WalletSelectModal from '@/components/web3/WalletSelectModal.vue';
+import useWeb3Watchers from '@/composables/watchers/useWeb3Watchers';
+import { DEFAULT_TOKEN_DECIMALS } from '@/constants/tokens';
+import useWeb3 from '@/services/web3/useWeb3';
+import BigNumber from 'bignumber.js';
+import { defineComponent, onBeforeMount, ref, watch } from 'vue';
+import { VueQueryDevTools } from 'vue-query/devtools';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 import useGnosisSafeApp from './composables/useGnosisSafeApp';
 import useGlobalQueryWatchers from './composables/watchers/useGlobalQueryWatchers';
-import useBreakpoints from './composables/useBreakpoints';
-import { tryPromiseWithTimeout } from './lib/utils/promise';
-import useTokens from './composables/useTokens';
-import useAlerts, { AlertPriority, AlertType } from './composables/useAlerts';
-import { KinesisContainer } from 'vue-kinesis';
 
 BigNumber.config({ DECIMAL_PLACES: DEFAULT_TOKEN_DECIMALS });
 

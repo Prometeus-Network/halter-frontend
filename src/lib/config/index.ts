@@ -48,6 +48,10 @@ export interface Config {
       name: string;
     }
   >;
+  rewards: {
+    apiURL: string;
+    trading: number[];
+  };
 }
 
 const config: Record<string, Config> = {

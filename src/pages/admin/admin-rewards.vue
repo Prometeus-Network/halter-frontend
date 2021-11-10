@@ -17,13 +17,33 @@
         >Authorize</BalBtn
       >
     </bal-card>
-    <div v-if="state.user" class="w-full md:w-1/2">
+    <div v-if="state.user" class="w-full">
       <h2 class="mb-2">Rewards distribution</h2>
 
       <bal-card class="w-full">
-        <BalTabs v-model="activeTab" :tabs="tabs" class="pt-4 -mb-px" no-pad />
+        <bal-select-input
+          :options="phases"
+          :modelValue="activePhase"
+          v-model="activePhase"
+          name="Phase"
+        />
 
-        <template v-if="activeTab === 'invest'"> </template>
+        <BalTabs v-model="activeTab" :tabs="tabs" class="pt-4 mb-6" no-pad />
+
+        <template v-if="activeTab === 'trade'">
+          <BalBtn
+            @click="payOutTrading(activePhase)"
+            :loading="state.loading"
+            loadingLabel="Loading..."
+            >Pay out Phase {{ parseInt(activePhase, 10) }}</BalBtn
+          >
+
+          <bal-table
+            :columns="state.tradingRewardsColumns"
+            :data="state.tradingRewards"
+          >
+          </bal-table>
+        </template>
       </bal-card>
     </div>
   </div>
@@ -31,36 +51,83 @@
 
 <script lang="ts">
 import useWeb3 from '@/services/web3/useWeb3';
-import { defineComponent, onMounted, reactive, ref } from 'vue';
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue';
 import { rewardsService } from '@/services/rewards';
 import { useI18n } from 'vue-i18n';
+import useNumbers from '@/composables/useNumbers';
+import { configService } from '@/services/config/config.service';
+import BalSelectInput from '@/components/_global/BalSelectInput/BalSelectInput.vue';
+import useNotifications from '@/composables/useNotifications';
 
 export default defineComponent({
+  components: { BalSelectInput },
   name: 'AdminRewards',
   setup() {
     const { account, getSigner } = useWeb3();
     const { t } = useI18n();
+    const { fNum } = useNumbers();
+    const { addNotification } = useNotifications();
 
     const state = reactive({
       loading: false,
-      user: null
+      user: null,
+      tradingRewards: [],
+      tradingRewardsColumns: [
+        {
+          name: 'Phase',
+          id: 'phase',
+          accessor: v => v.phase,
+          width: 100
+        },
+        {
+          name: 'Address',
+          id: 'address',
+          accessor: 'address',
+          width: 500
+        },
+        {
+          name: 'Percentage',
+          id: 'percentage',
+          cellClassName: 'font-numeric',
+          accessor: v => fNum(v.percentage, 'percent')
+        },
+        {
+          name: 'Rewards',
+          id: 'rewards',
+          cellClassName: 'font-numeric',
+          accessor: v =>
+            fNum(
+              v.percentage * configService.network.rewards.trading[v.phase],
+              'token'
+            ) + ' HALT'
+        },
+        {
+          name: 'Paid out',
+          id: 'paid-out',
+          accessor: v => (v.paidOut ? 'Paid' : 'Not paid')
+        }
+      ]
     });
 
     const tabs = [
-      { value: 'invest', label: t('invest') },
       { value: 'trade', label: t('trade') },
       { value: 'stake', label: t('stake') }
     ];
 
     const activeTab = ref(tabs[0].value);
 
-    const phases = [
-      {
-        value: 0,
-        text: 'Phase 1'
-      }
-    ];
+    const phases = Object.keys(configService.network.rewards.trading).map(
+      (_, index) => ({
+        value: index.toString(),
+        text: `Phase ${index}`
+      })
+    );
+
     const activePhase = ref(phases[0].value);
+
+    watch(activePhase, () => {
+      fetchRewards(parseInt(activePhase.value, 10));
+    });
 
     const refreshUser = async () => {
       state.loading = true;
@@ -74,8 +141,32 @@ export default defineComponent({
       state.loading = false;
     };
 
+    const fetchRewards = async (phase: number) => {
+      const { tradingRewards } = await rewardsService.getRewardsByPhase(phase);
+
+      state.tradingRewards = tradingRewards;
+    };
+
+    const payOutTrading = async (phase: string) => {
+      state.loading = true;
+      try {
+        await rewardsService.payOutTrading(parseInt(phase, 10));
+        await fetchRewards(parseInt(phase, 10));
+      } catch (error) {
+        debugger;
+        addNotification({
+          type: 'error',
+          title: 'Unable to pay out',
+          message:
+            (error as any)?.response?.data?.message || (error as any).message
+        });
+      }
+      state.loading = false;
+    };
+
     onMounted(() => {
       refreshUser();
+      fetchRewards(parseInt(activePhase.value, 10));
     });
 
     const authorize = async () => {
@@ -114,7 +205,8 @@ export default defineComponent({
       tabs,
       activeTab,
       phases,
-      activePhase
+      activePhase,
+      payOutTrading
     };
   }
 });

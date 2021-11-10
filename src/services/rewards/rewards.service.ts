@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { subgraphRequest } from '@/lib/utils/subgraph';
+import { configService } from '../config/config.service';
 
 export type LoginDto = {
   signed: string;
@@ -7,7 +9,9 @@ export type LoginDto = {
 };
 
 class RewardsService {
-  private axiosClient = axios.create({ baseURL: 'http://localhost:5000/' });
+  private axiosClient = axios.create({
+    baseURL: configService.network.rewards.apiURL
+  });
 
   private setToken(token: string) {
     this.axiosClient.defaults.headers['Authorization'] = `Bearer ${token}`;
@@ -31,6 +35,29 @@ class RewardsService {
     }
 
     return response;
+  }
+
+  async getRewardsByPhase(phase?: number) {
+    return subgraphRequest(`${configService.network.rewards.apiURL}/graphql`, {
+      tradingRewards: {
+        ...(phase !== undefined
+          ? {
+              __args: {
+                phase: phase
+              }
+            }
+          : {}),
+        phase: true,
+        percentage: true,
+        address: true,
+        tradeVolumeUSD: true,
+        paidOut: true
+      }
+    });
+  }
+
+  async payOutTrading(phase: number) {
+    return this.axiosClient.post('/trading/payout', { phase });
   }
 }
 

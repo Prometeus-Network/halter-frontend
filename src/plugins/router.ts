@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import HomePage from '@/pages/index.vue';
 import PoolPage from '@/pages/pool/_id.vue';
+import AdminRewardsPage from '@/pages/admin/admin-rewards.vue';
+
 import LiquidityMiningPage from '@/pages/liquidity-mining.vue';
 import ManageRewards from '@/pages/manage-rewards.vue';
 import TradePage from '@/pages/trade.vue';
@@ -41,6 +43,11 @@ const routes: RouteRecordRaw[] = [
     path: '/manage-rewards',
     name: 'manage-rewards',
     component: ManageRewards
+  },
+  {
+    path: '/admin/rewards',
+    name: 'admin-rewards',
+    component: AdminRewardsPage
   },
   {
     path: '/:pathMatch(.*)*',

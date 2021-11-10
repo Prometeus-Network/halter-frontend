@@ -52,5 +52,9 @@
       "name": "weightedPool"
     }
   },
+  "rewards": {
+    "apiURL": "https://testnet.api-rewards.halter.finance",
+    "trading": [10000000, 5000000, 2500000, 1250000]
+  },
   "supportsElementPools": false
 }

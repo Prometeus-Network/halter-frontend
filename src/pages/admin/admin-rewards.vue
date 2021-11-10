@@ -153,7 +153,6 @@ export default defineComponent({
         await rewardsService.payOutTrading(parseInt(phase, 10));
         await fetchRewards(parseInt(phase, 10));
       } catch (error) {
-        debugger;
         addNotification({
           type: 'error',
           title: 'Unable to pay out',

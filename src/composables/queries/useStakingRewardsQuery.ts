@@ -1,17 +1,15 @@
 import { FETCH_ONCE_OPTIONS } from '@/constants/vue-query';
+import { LockWithdrawStructOutput } from '@/lib/typechain/HalterStakingLocked';
 import { defaultIfCatch } from '@/lib/utils';
 import useWeb3 from '@/services/web3/useWeb3';
 import { BigNumber } from '@ethersproject/bignumber';
 import { UseQueryOptions } from 'react-query/types';
 import { computed, reactive } from 'vue';
 import { useQuery } from 'vue-query';
-import useLiquidityRewardsContracts from '../rewards/useLiquidityRewardsContract';
+import useStakingRewardsContracts from '../rewards/useStakingRewardsContract';
 import useRewardsWeek from '../useRewardsWeek';
 
-export default function useLiquidityMiningRewardsQuery(
-  poolIds: string[],
-  options: UseQueryOptions = {}
-) {
+export default function useStackingRewardsQuery(options: UseQueryOptions = {}) {
   /**
    * COMPOSABLES
    */
@@ -23,42 +21,40 @@ export default function useLiquidityMiningRewardsQuery(
    */
   const enabled = computed(() => isWalletReady.value);
 
-  const liquidityRewardContracts = useLiquidityRewardsContracts(...poolIds);
+  const [
+    stakingUnlockedContract,
+    stakingLockedContract
+  ] = useStakingRewardsContracts();
 
   /**
    * QUERY INPUTS
    */
-  const queryKey = reactive([
-    'liquidityMiningRewards',
-    account,
-    poolIds.join(',')
-  ]);
+  const queryKey = reactive(['stakingRewards', account]);
 
   const queryFn = async () => {
-    const byPool = await Promise.all(
-      liquidityRewardContracts.value.map(
-        async (liquidityRewardContract, index) => {
+    const [unlocked, partialLocked] = await Promise.all(
+      [stakingUnlockedContract.value, stakingLockedContract.value].map(
+        async stakingContract => {
           const [
             stakedAmount,
             totalRewards,
             vestedRewards
           ] = await Promise.all([
             defaultIfCatch(
-              liquidityRewardContract.userStaked(account.value),
+              stakingContract.userStaked(account.value),
               BigNumber.from(0)
             ),
             defaultIfCatch(
-              liquidityRewardContract.viewTotalRewards(currentWeek.value),
+              stakingContract.viewTotalRewards(currentWeek.value),
               BigNumber.from(0)
             ),
             defaultIfCatch(
-              liquidityRewardContract.viewVestedRewards(currentWeek.value),
+              stakingContract.viewVestedRewards(currentWeek.value),
               BigNumber.from(0)
             )
           ]);
 
           return {
-            poolId: poolIds[index],
             stakedAmount,
             totalRewards,
             vestedRewards
@@ -66,7 +62,19 @@ export default function useLiquidityMiningRewardsQuery(
         }
       )
     );
-    return byPool;
+
+    let withdrawPurgatory: LockWithdrawStructOutput = [];
+    try {
+      withdrawPurgatory = (await stakingLockedContract.value.viewWithdrawPurgatoryArray()) as any;
+    } catch (error) {
+      console.error(error);
+    }
+
+    const locked = {
+      ...partialLocked,
+      withdrawPurgatory
+    };
+    return { unlocked, locked };
   };
 
   const queryOptions = reactive({

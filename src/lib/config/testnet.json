@@ -30,13 +30,22 @@
     "vault": "0xe8Ff274dEB1610177659D73967BAf4BCb5f800Ff",
     "weightedPoolFactory": "0x2dB05b4A7f92b536C419f821B5B716C14A1AE56a",
     "stablePoolFactory": "0xae81DdCED2596a78a673e4ddb219e015181751de",
-    "halt": "",
+    "halt": "0x7f63ed5bae2bf8cfa8f79e8bc9524e434a26c174",
     "weth": "0x1EF81Cc9040A7bf316EeD03BcAe56EdC645E1425",
     "stETH": "",
     "wstETH": "",
     "lidoRelayer": "",
     "balancerHelpers": "0x1EEcF6462D7925CDf7FF629b2E633A274885da94",
-    "liquidityRewards": "0xBD3A8Ff1E2daAAaDd7c5aBE96b59b84B988EABda"
+
+    "rewardToken": "0x4E9d833A5414877D7bA4E98d05c6249F6E2b0595",
+    "tradeRewards": "0x0A572c1F4711502f8F656049F6f2f9153fEEF058",
+    "stakeToken": "0xDa24d810E94114935c78FfB38F2d768e5c44dF7f",
+    "halterStakingLocked": "0x561a9176ddc74b1DdC3E3FB3DB5E740BdbBfCBAD",
+    "halterStakingUnlocked": "0x77972706E37B221052DD55aBFb32B13966865313"
+  },
+  "liquidityRewards": {
+    "0x48390fabc28c6dbaa4afc0e2172b6ad6195f4d2b000200000000000000000000": "0x69D954587b84f8E865Bef2Bb08518034FC19bA67",
+    "0x63b2a8372b40ddd833848c4471b0fa466068eb98000200000000000000000005": "0x6F6F32cf7C53fc914053546cCB5e309C36Ff9095"
   },
   "strategies": {
     "0": {

@@ -360,14 +360,14 @@ export default {
      * Get subset of tokens from state
      */
     function getTokens(addresses: string[]): TokenInfoMap {
-      return pick(tokens.value, addresses);
+      return pick(tokens.value, addresses.map(getAddress));
     }
 
     /**
      * Get single token from state
      */
     function getToken(address: string): TokenInfo {
-      return tokens.value[address];
+      return tokens.value[getAddress(address)];
     }
 
     /**

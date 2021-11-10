@@ -13,7 +13,7 @@
         />
         <BalLoadingIcon size="sm" v-if="userClaimsLoading" />
         <span class="hidden lg:block" v-else>
-          {{ fNum(totalRewards, 'token') }} HALT
+          {{ fNumToken(totalRewards) }} HALT
         </span>
       </BalBtn>
     </template>
@@ -23,7 +23,7 @@
           <div class="text-gray-500">{{ $t('totalRewards') }}:</div>
           <div class="flex justify-between">
             <span class="font-semibold"
-              >{{ fNum(totalRewards, 'token') }} HALT</span
+              >{{ fNumToken(totalRewards) }} HALT</span
             >
             <span>$ x.xx</span>
           </div>
@@ -33,7 +33,7 @@
           <div class="text-gray-500">{{ $t('availableToClaim') }}:</div>
           <div class="flex justify-between">
             <span class="font-semibold"
-              >{{ fNum(claimableRewards, 'token') }} HALT</span
+              >{{ fNumToken(claimableRewards) }} HALT</span
             >
             <span>$ x.xx</span>
           </div>
@@ -53,9 +53,11 @@
 <script lang="ts">
 import useBreakpoints from '@/composables/useBreakpoints';
 import useNumbers from '@/composables/useNumbers';
-import useRewards from '@/composables/useRewards';
+import useLiquidityRewards from '@/composables/rewards/useLiquidityRewards';
+import useStakingRewardsQuery from '@/composables/queries/useStakingRewardsQuery';
+import useTradingRewardsQuery from '@/composables/queries/useTradingRewardsQuery';
 import useWeb3 from '@/services/web3/useWeb3';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'AppNavActivityBtn',
@@ -68,18 +70,34 @@ export default defineComponent({
      */
     const { upToLargeBreakpoint } = useBreakpoints();
     const { isLoadingProfile, profile, account } = useWeb3();
-    const { fNum } = useNumbers();
+    const { fNumToken } = useNumbers();
 
-    const { total, claimable } = useRewards();
+    const { total, claimable } = useLiquidityRewards();
+    const { data: stakingRewardsData } = useStakingRewardsQuery();
+    const { data: tradingRewardsData } = useTradingRewardsQuery();
+
+    const totalRewards = computed(() =>
+      total.value
+        .add(stakingRewardsData.value?.locked.totalRewards ?? 0)
+        .add(stakingRewardsData.value?.unlocked.totalRewards ?? 0)
+        .add(tradingRewardsData.value?.totalRewards ?? 0)
+    );
+
+    const claimableRewards = computed(() =>
+      claimable.value
+        .add(stakingRewardsData.value?.locked.vestedRewards ?? 0)
+        .add(stakingRewardsData.value?.unlocked.vestedRewards ?? 0)
+        .add(tradingRewardsData.value?.claimableRewards ?? 0)
+    );
 
     return {
-      totalRewards: total,
-      claimableRewards: claimable,
+      totalRewards,
+      claimableRewards,
       account,
       profile,
       upToLargeBreakpoint,
       isLoadingProfile,
-      fNum
+      fNumToken
     };
   }
 });

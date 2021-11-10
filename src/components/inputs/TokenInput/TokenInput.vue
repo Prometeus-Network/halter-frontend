@@ -26,6 +26,7 @@ type Props = {
   fixedToken?: boolean;
   customBalance?: string;
   disableMax?: boolean;
+  hideInCurrency?: boolean;
 };
 
 /**
@@ -38,7 +39,8 @@ const props = withDefaults(defineProps<Props>(), {
   noRules: false,
   noMax: false,
   fixedToken: false,
-  disableMax: false
+  disableMax: false,
+  hideInCurrency: false
 });
 
 const emit = defineEmits<{
@@ -201,7 +203,10 @@ watchEffect(() => {
               </span>
             </template>
           </div>
-          <div v-if="hasAmount && hasToken" class="font-numeric">
+          <div
+            v-if="hasAmount && hasToken && !hideInCurrency"
+            class="font-numeric"
+          >
             {{ fNum(tokenValue, currency) }}
             <span v-if="priceImpact" :class="priceImpactClass">
               ({{ priceImpactSign + fNum(priceImpact, 'percent') }})

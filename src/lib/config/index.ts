@@ -34,13 +34,20 @@ export interface Config {
     vault: string;
     weightedPoolFactory: string;
     stablePoolFactory: string;
+    halt: string;
     weth: string;
     stETH: string;
     wstETH: string;
     lidoRelayer: string;
     balancerHelpers: string;
-    liquidityRewards: string;
+
+    rewardToken: string;
+    tradeRewards: string;
+    stakeToken: string;
+    halterStakingLocked: string;
+    halterStakingUnlocked: string;
   };
+  liquidityRewards: Record<string, string>;
   strategies: Record<
     string,
     {

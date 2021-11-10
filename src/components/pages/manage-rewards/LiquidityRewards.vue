@@ -82,7 +82,7 @@ import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
 import RadialProgressBar from 'vue-radial-progress';
 import useUserRewardPoolsQuery from '@/composables/queries/useUserRewardPoolsQuery';
 import { defineComponent, computed } from 'vue';
-import useRewards from '@/composables/useRewards';
+import useLiquidityRewards from '@/composables/rewards/useLiquidityRewards';
 import BigNumber from 'bignumber.js';
 import useNumbers from '@/composables/useNumbers';
 
@@ -95,17 +95,15 @@ export default defineComponent({
       data: userRewardPoolsData,
       isLoading: isLoadingUserRewardPools
     } = useUserRewardPoolsQuery();
-    const { total, claimable } = useRewards();
-    const { fNum } = useNumbers();
+    const { total, claimable } = useLiquidityRewards();
+    const { fNumToken } = useNumbers();
 
     const userRewardPools = computed(() => userRewardPoolsData.value ?? []);
 
-    const lockedRewards = computed(() =>
-      new BigNumber(total.value).minus(claimable.value)
-    );
+    const lockedRewards = computed(() => total.value.sub(claimable.value));
 
     const completedSteps = computed(() => {
-      if (total.value === '0.0') {
+      if (total.value.isZero()) {
         return 0;
       }
       const claimableBn = new BigNumber(claimable.value.toString());
@@ -114,7 +112,7 @@ export default defineComponent({
       return ratio.gt(1) ? ratio.toNumber() : 0;
     });
 
-    const formatToken = (amount: string) => fNum(amount, 'token');
+    const formatToken = (amount: string) => fNumToken(amount);
 
     return {
       formatToken,

@@ -3,7 +3,6 @@ import store from '@/store';
 import router from '@/plugins/router';
 import mixins from '@/plugins/mixins';
 import i18n from '@/plugins/i18n';
-import blocknative from '@/plugins/blocknative';
 import vueQuery from '@/plugins/vueQuery';
 import initSentry from '@/plugins/sentry';
 import registerDirectives from '@/plugins/directives';
@@ -45,7 +44,6 @@ const app = createApp(Root)
   .use(i18n)
   .use(router)
   .use(store)
-  .use(blocknative)
   .use(vueQuery)
   .use(Web3Plugin, Web3Provider)
   .mixin(mixins)

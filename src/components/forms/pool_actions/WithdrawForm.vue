@@ -195,9 +195,10 @@ import TokenInput from '@/components/inputs/TokenInput/TokenInput.vue';
 import TransactionsPreviewModal, {
   Transaction
 } from '@/components/modals/TransactionsPreviewModal.vue';
-import useRewards from '@/composables/useRewards';
-import useLiquidityRewardsContract from '@/composables/useLiquidityRewardsContract';
+import useLiquidityRewards from '@/composables/rewards/useLiquidityRewards';
+import useLiquidityRewardsContracts from '@/composables/rewards/useLiquidityRewardsContract';
 import useNotifications from '@/composables/useNotifications';
+import useRewardsWeek from '@/composables/useRewardsWeek';
 
 export enum FormTypes {
   proportional = 'proportional',
@@ -252,8 +253,9 @@ export default defineComponent({
     const { addTransaction } = useTransactions();
     const { addErrorNotification } = useNotifications();
     const { isStableLikePool } = usePool(toRef(props, 'pool'));
-    const { byPool } = useRewards([props.pool.id]);
-    const liquidityRewardsContract = useLiquidityRewardsContract();
+    const { byPool } = useLiquidityRewards([props.pool.id]);
+    const liquidityRewardsContracts = useLiquidityRewardsContracts();
+    const { currentWeek } = useRewardsWeek();
 
     // SERVICES
     const poolExchange = computed(
@@ -563,15 +565,15 @@ export default defineComponent({
 
     async function submit(): Promise<void> {
       if (!data.withdrawForm.validate()) return;
-      if (!byPool.value[0].stakedAmountLPT.isZero()) {
+      if (!byPool[0].stakedAmount.isZero()) {
         transactions.value = [
           {
             title: t('stopEarningRewards'),
             handler: async () => {
               try {
-                const tx = await liquidityRewardsContract.value.withdrawLPT(
-                  byPool.value[0].rewardPoolId,
-                  byPool.value[0].stakedAmountLPT
+                const tx = await liquidityRewardsContracts.value[0].withdraw(
+                  byPool[0].stakedAmount,
+                  currentWeek.value
                 );
 
                 addTransaction({
@@ -580,7 +582,7 @@ export default defineComponent({
                   action: 'withdraw',
                   summary: t('transactionSummary.withdraw'),
                   details: {
-                    contractAddress: liquidityRewardsContract.value.address
+                    contractAddress: liquidityRewardsContracts.value[0].address
                   }
                 });
               } catch (error) {

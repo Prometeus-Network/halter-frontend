@@ -102,3 +102,14 @@ export async function forChange(
   await sleep(checkDelay);
   await forChange(reactiveVar, expected, checkCount++);
 }
+
+export async function defaultIfCatch<T>(
+  promise: Promise<T>,
+  defaultValue: T
+): Promise<T> {
+  try {
+    return await promise;
+  } catch (error) {
+    return defaultValue;
+  }
+}

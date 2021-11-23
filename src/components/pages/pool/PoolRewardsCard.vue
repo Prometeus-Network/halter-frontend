@@ -16,11 +16,11 @@
 
 <script lang="ts">
 import useTokenApprovals from '@/composables/pools/useTokenApprovals';
-import useLiquidityRewardsContract from '@/composables/useLiquidityRewardsContract';
+import useLiquidityRewardsContract from '@/composables/rewards/useLiquidityRewardsContract';
+import useNotifications from '@/composables/useNotifications';
+import useRewardsWeek from '@/composables/useRewardsWeek';
 import useTokens from '@/composables/useTokens';
 import useTransactions from '@/composables/useTransactions';
-import useNotifications from '@/composables/useNotifications';
-import { POOLS } from '@/constants/pools';
 import { DecoratedPool } from '@/services/balancer/subgraph/types';
 import { parseUnits } from '@ethersproject/units';
 import { defineComponent, PropType, ref } from 'vue';
@@ -44,19 +44,19 @@ export default defineComponent({
       approving,
       approvedAll
     } = useTokenApprovals([props.pool.address], lpTokenBalances);
-    const liquidityRewardsContract = useLiquidityRewardsContract();
+    const liquidityRewardsContract = useLiquidityRewardsContract(props.pool.id);
+    const { currentWeek } = useRewardsWeek();
     const { addTransaction } = useTransactions();
     const { addErrorNotification } = useNotifications();
     const { t } = useI18n();
 
     const depositLptMutation = useMutation(async () => {
-      const pid = POOLS.Reward.indexOf(props.pool.id);
       const parsedAmount = parseUnits(lpTokenBalances.value[0], 18);
 
       try {
-        const tx = await liquidityRewardsContract.value.depositLPT(
-          pid,
-          parsedAmount
+        const tx = await liquidityRewardsContract.value[0].stake(
+          parsedAmount,
+          currentWeek.value
         );
 
         addTransaction({
@@ -65,7 +65,7 @@ export default defineComponent({
           action: 'deposit',
           summary: t('transactionSummary.deposit'),
           details: {
-            contractAddress: liquidityRewardsContract.value.address
+            contractAddress: liquidityRewardsContract.value[0].address
           }
         });
       } catch (error) {

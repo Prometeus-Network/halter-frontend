@@ -1,6 +1,7 @@
 import numeral from 'numeral';
 import BigNumber from 'bignumber.js';
 import useTokens from './useTokens';
+import { formatUnits } from '@ethersproject/units';
 
 export type Preset =
   | 'default'
@@ -51,6 +52,10 @@ export function fNum(
   );
 }
 
+export function fNumToken(value: number | string, decimals = 18) {
+  return fNum(formatUnits(value, decimals), 'default');
+}
+
 export default function useNumbers() {
   const { priceFor } = useTokens();
 
@@ -60,5 +65,5 @@ export default function useNumbers() {
     return tokenAmount.times(price).toString();
   }
 
-  return { fNum, toFiat };
+  return { fNum, fNumToken, toFiat };
 }

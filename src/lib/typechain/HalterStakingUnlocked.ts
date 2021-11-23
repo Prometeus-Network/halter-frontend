@@ -24,20 +24,18 @@ import type {
   OnEvent,
 } from "./common";
 
-export interface LiquidityRewardsInterface extends ethers.utils.Interface {
+export interface HalterStakingUnlockedInterface extends ethers.utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "TREASURY_ROLE()": FunctionFragment;
     "UPDATER_ROLE()": FunctionFragment;
     "claimRewards(uint256)": FunctionFragment;
-    "depositEndTime()": FunctionFragment;
-    "emergencyClaim(uint256)": FunctionFragment;
     "falseRewardClaimed(address)": FunctionFragment;
     "falseRewardUnclaimed(address,uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,address,address)": FunctionFragment;
+    "initialize(address,address,address,uint256,uint256,uint256,uint256,uint256,address,address)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "reservoir()": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
@@ -79,14 +77,6 @@ export interface LiquidityRewardsInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "depositEndTime",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "emergencyClaim",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "falseRewardClaimed",
     values: [string]
   ): string;
@@ -112,7 +102,6 @@ export interface LiquidityRewardsInterface extends ethers.utils.Interface {
       string,
       string,
       string,
-      BigNumberish,
       BigNumberish,
       BigNumberish,
       BigNumberish,
@@ -222,14 +211,6 @@ export interface LiquidityRewardsInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "depositEndTime",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "emergencyClaim",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "falseRewardClaimed",
     data: BytesLike
   ): Result;
@@ -311,7 +292,6 @@ export interface LiquidityRewardsInterface extends ethers.utils.Interface {
 
   events: {
     "Claimed(address,uint256)": EventFragment;
-    "EmergencyClaimed(address,uint256,uint256)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
@@ -320,7 +300,6 @@ export interface LiquidityRewardsInterface extends ethers.utils.Interface {
   };
 
   getEvent(nameOrSignatureOrTopic: "Claimed"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "EmergencyClaimed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
@@ -334,14 +313,6 @@ export type ClaimedEvent = TypedEvent<
 >;
 
 export type ClaimedEventFilter = TypedEventFilter<ClaimedEvent>;
-
-export type EmergencyClaimedEvent = TypedEvent<
-  [string, BigNumber, BigNumber],
-  { claimer: string; rewardAmount: BigNumber; penaltyAmount: BigNumber }
->;
-
-export type EmergencyClaimedEventFilter =
-  TypedEventFilter<EmergencyClaimedEvent>;
 
 export type RoleAdminChangedEvent = TypedEvent<
   [string, string, string],
@@ -379,12 +350,12 @@ export type WithdrawnEvent = TypedEvent<
 
 export type WithdrawnEventFilter = TypedEventFilter<WithdrawnEvent>;
 
-export interface LiquidityRewards extends BaseContract {
+export interface HalterStakingUnlocked extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: LiquidityRewardsInterface;
+  interface: HalterStakingUnlockedInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -413,13 +384,6 @@ export interface LiquidityRewards extends BaseContract {
     UPDATER_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     claimRewards(
-      _weekNumber: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    depositEndTime(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    emergencyClaim(
       _weekNumber: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -464,7 +428,6 @@ export interface LiquidityRewards extends BaseContract {
       _startWeekEndTime: BigNumberish,
       _amountOfWeeksToSet: BigNumberish,
       _rewardsVestingDuration: BigNumberish,
-      _depositEndTime: BigNumberish,
       _treasury: string,
       _updater: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -617,13 +580,6 @@ export interface LiquidityRewards extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  depositEndTime(overrides?: CallOverrides): Promise<BigNumber>;
-
-  emergencyClaim(
-    _weekNumber: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   falseRewardClaimed(
     arg0: string,
     overrides?: CallOverrides
@@ -664,7 +620,6 @@ export interface LiquidityRewards extends BaseContract {
     _startWeekEndTime: BigNumberish,
     _amountOfWeeksToSet: BigNumberish,
     _rewardsVestingDuration: BigNumberish,
-    _depositEndTime: BigNumberish,
     _treasury: string,
     _updater: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -814,13 +769,6 @@ export interface LiquidityRewards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    depositEndTime(overrides?: CallOverrides): Promise<BigNumber>;
-
-    emergencyClaim(
-      _weekNumber: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     falseRewardClaimed(
       arg0: string,
       overrides?: CallOverrides
@@ -861,7 +809,6 @@ export interface LiquidityRewards extends BaseContract {
       _startWeekEndTime: BigNumberish,
       _amountOfWeeksToSet: BigNumberish,
       _rewardsVestingDuration: BigNumberish,
-      _depositEndTime: BigNumberish,
       _treasury: string,
       _updater: string,
       overrides?: CallOverrides
@@ -1007,17 +954,6 @@ export interface LiquidityRewards extends BaseContract {
     ): ClaimedEventFilter;
     Claimed(claimer?: null, amount?: null): ClaimedEventFilter;
 
-    "EmergencyClaimed(address,uint256,uint256)"(
-      claimer?: null,
-      rewardAmount?: null,
-      penaltyAmount?: null
-    ): EmergencyClaimedEventFilter;
-    EmergencyClaimed(
-      claimer?: null,
-      rewardAmount?: null,
-      penaltyAmount?: null
-    ): EmergencyClaimedEventFilter;
-
     "RoleAdminChanged(bytes32,bytes32,bytes32)"(
       role?: BytesLike | null,
       previousAdminRole?: BytesLike | null,
@@ -1077,13 +1013,6 @@ export interface LiquidityRewards extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    depositEndTime(overrides?: CallOverrides): Promise<BigNumber>;
-
-    emergencyClaim(
-      _weekNumber: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     falseRewardClaimed(
       arg0: string,
       overrides?: CallOverrides
@@ -1121,7 +1050,6 @@ export interface LiquidityRewards extends BaseContract {
       _startWeekEndTime: BigNumberish,
       _amountOfWeeksToSet: BigNumberish,
       _rewardsVestingDuration: BigNumberish,
-      _depositEndTime: BigNumberish,
       _treasury: string,
       _updater: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1233,13 +1161,6 @@ export interface LiquidityRewards extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    depositEndTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    emergencyClaim(
-      _weekNumber: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     falseRewardClaimed(
       arg0: string,
       overrides?: CallOverrides
@@ -1277,7 +1198,6 @@ export interface LiquidityRewards extends BaseContract {
       _startWeekEndTime: BigNumberish,
       _amountOfWeeksToSet: BigNumberish,
       _rewardsVestingDuration: BigNumberish,
-      _depositEndTime: BigNumberish,
       _treasury: string,
       _updater: string,
       overrides?: Overrides & { from?: string | Promise<string> }

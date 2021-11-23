@@ -5,27 +5,11 @@
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import type {
-  LiquidityRewards,
-  LiquidityRewardsInterface,
-} from "../LiquidityRewards";
+  HalterStakingLocked,
+  HalterStakingLockedInterface,
+} from "../HalterStakingLocked";
 
 const _abi = [
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "prod1",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "denominator",
-        type: "uint256",
-      },
-    ],
-    name: "PRBMath__MulDivOverflow",
-    type: "error",
-  },
   {
     anonymous: false,
     inputs: [
@@ -43,31 +27,6 @@ const _abi = [
       },
     ],
     name: "Claimed",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "claimer",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "rewardAmount",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "penaltyAmount",
-        type: "uint256",
-      },
-    ],
-    name: "EmergencyClaimed",
     type: "event",
   },
   {
@@ -182,6 +141,31 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
+        name: "weekNumber",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "WithdrawLockStarted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "staker",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
         name: "amount",
         type: "uint256",
       },
@@ -237,32 +221,6 @@ const _abi = [
       },
     ],
     name: "claimRewards",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "depositEndTime",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_weekNumber",
-        type: "uint256",
-      },
-    ],
-    name: "emergencyClaim",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -421,11 +379,6 @@ const _abi = [
       {
         internalType: "uint256",
         name: "_rewardsVestingDuration",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_depositEndTime",
         type: "uint256",
       },
       {
@@ -678,6 +631,24 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_weekNumber",
+        type: "uint256",
+      },
+    ],
+    name: "startWithdrawLock",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes4",
         name: "interfaceId",
         type: "bytes4",
@@ -830,6 +801,31 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "viewWithdrawPurgatoryArray",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "unlockTime",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct HalterStakingLocked.LockWithdraw[]",
+        name: "arr",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -881,19 +877,30 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
         internalType: "uint256",
-        name: "_amount",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "withdrawPurgatory",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "_weekNumber",
+        name: "unlockTime",
         type: "uint256",
       },
     ],
-    name: "withdraw",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -909,17 +916,24 @@ const _abi = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [],
+    name: "withdrawUnlockedTokens",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
 ];
 
-export class LiquidityRewards__factory {
+export class HalterStakingLocked__factory {
   static readonly abi = _abi;
-  static createInterface(): LiquidityRewardsInterface {
-    return new utils.Interface(_abi) as LiquidityRewardsInterface;
+  static createInterface(): HalterStakingLockedInterface {
+    return new utils.Interface(_abi) as HalterStakingLockedInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): LiquidityRewards {
-    return new Contract(address, _abi, signerOrProvider) as LiquidityRewards;
+  ): HalterStakingLocked {
+    return new Contract(address, _abi, signerOrProvider) as HalterStakingLocked;
   }
 }

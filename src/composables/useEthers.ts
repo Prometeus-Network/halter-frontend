@@ -30,7 +30,7 @@ export default function useEthers() {
     tx: TransactionResponse,
     callbacks: {
       onTxConfirmed: TxCallback;
-      onTxFailed: TxCallback;
+      onTxFailed?: TxCallback;
     },
     shouldRefetchBalances = true
   ) {
@@ -69,7 +69,7 @@ export default function useEthers() {
       }
     } catch (error) {
       console.error(error);
-      callbacks.onTxFailed(tx);
+      callbacks.onTxFailed?.(tx);
     }
 
     processedTxs.value.delete(tx.hash);

@@ -6,6 +6,7 @@ import AdminRewardsPage from '@/pages/admin/admin-rewards.vue';
 import LiquidityMiningPage from '@/pages/liquidity-mining.vue';
 import ManageRewards from '@/pages/manage-rewards.vue';
 import TradePage from '@/pages/trade.vue';
+import StakePage from '@/pages/stake.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -37,7 +38,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/stake',
     name: 'stake',
-    component: HomePage
+    component: StakePage
   },
   {
     path: '/manage-rewards',

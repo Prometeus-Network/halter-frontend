@@ -3,28 +3,28 @@
     <div :class="`app-nav-toggle bg-gray-50 dark:bg-gray-${darkModeBg}`">
       <router-link
         :to="{ name: 'home' }"
-        :class="['toggle-link', { [activeClasses]: !isTradePage }]"
+        :class="[
+          'toggle-link',
+          { [activeClasses]: !['trade', 'stake'].includes(currentPage) }
+        ]"
         @click="trackGoal(Goals.ClickNavInvest)"
       >
         {{ $t('invest') }}
       </router-link>
       <router-link
         :to="{ name: 'trade' }"
-        :class="['toggle-link', { [activeClasses]: isTradePage }]"
+        :class="['toggle-link', { [activeClasses]: currentPage === 'trade' }]"
         @click="trackGoal(Goals.ClickNavTrade)"
       >
         {{ $t('trade') }}
       </router-link>
-      <!-- <router-link
-      :to="{ name: 'stake' }"
-      :class="[
-        'toggle-link px-6 rounded-r-lg',
-        { [activeClasses]: isTradePage }
-      ]"
-      @click="trackGoal(Goals.ClickNavTrade)"
-    >
-      {{ $t('stake') }}
-    </router-link> -->
+      <router-link
+        :to="{ name: 'stake' }"
+        :class="['toggle-link', { [activeClasses]: currentPage === 'stake' }]"
+        @click="trackGoal(Goals.ClickNavTrade)"
+      >
+        {{ $t('stake') }}
+      </router-link>
     </div>
   </div>
 </template>
@@ -44,11 +44,11 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const activeClasses = 'gradient-purple-diagonal text-white';
-    const isTradePage = computed(() => route.name === 'trade');
+    const currentPage = computed(() => route.name);
     const { trackGoal, Goals } = useFathom();
 
     return {
-      isTradePage,
+      currentPage,
       activeClasses,
       trackGoal,
       Goals

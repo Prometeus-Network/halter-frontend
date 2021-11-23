@@ -54,8 +54,8 @@ import TradeSettingsPopover, {
 } from '@/components/popovers/TradeSettingsPopover.vue';
 import useFathom from '@/composables/useFathom';
 import useTokens from '@/composables/useTokens';
-import { POOLS } from '@/constants/pools';
 import { FullPool } from '@/services/balancer/subgraph/types';
+import { configService } from '@/services/config/config.service';
 import useWeb3 from '@/services/web3/useWeb3';
 import { computed, defineComponent, PropType, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -102,7 +102,7 @@ export default defineComponent({
     const shouldShowRewardsBlock = computed(
       () =>
         Number(balanceFor(props.pool.address)) !== 0 &&
-        POOLS.Reward.includes(props.pool.id)
+        Boolean(configService.network.liquidityRewards[props.pool.id])
     );
 
     /**

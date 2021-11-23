@@ -40,7 +40,8 @@ export type TransactionAction =
   | 'unwrap'
   | 'invest'
   | 'withdraw'
-  | 'deposit';
+  | 'deposit'
+  | 'unlock';
 
 export type TransactionType = 'order' | 'tx';
 

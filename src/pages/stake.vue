@@ -91,21 +91,41 @@
           </template>
 
           <template v-if="activeTab === 'withdraw'">
-            <TokenInput
-              v-if="halter"
-              v-model:amount="amountToWithdraw"
-              v-model:isValid="isWithdrawInputValid"
-              :customBalance="formatBn(available)"
-              :address="halter.address"
-              :isValid="true"
-              :weight="0"
-              :name="halter.address"
-              fixedToken
-              hideInCurrency
-            />
+            <BalRadio name="depositType" value="unlocked" v-model="depositType">
+              <template v-slot:label>
+                <div class="grid gap-y-2">
+                  Withdraw your locked tokens
+                </div>
+              </template>
+            </BalRadio>
+            <BalRadio name="depositType" value="locked" v-model="depositType">
+              <template v-slot:label>
+                <div class="grid gap-y-2">
+                  Withdraw your unlocked tokens ({{ formatBn(unlocked) }} HALT)
+                </div>
+              </template>
+            </BalRadio>
+            <template v-if="depositType === 'unlocked'">
+              <TokenInput
+                v-if="halter"
+                v-model:amount="amountToWithdraw"
+                v-model:isValid="isWithdrawInputValid"
+                :customBalance="formatBn(availableForDepositType)"
+                :address="halter.address"
+                :isValid="true"
+                :weight="0"
+                :name="halter.address"
+                fixedToken
+                hideInCurrency
+              />
+            </template>
             <BalBtn
               color="gradient"
-              :disabled="!isWithdrawInputValid"
+              :disabled="
+                depositType === 'unlocked'
+                  ? !isWithdrawInputValid
+                  : unlocked.isZero()
+              "
               @click.prevent="withdraw"
               >Withdraw</BalBtn
             >
@@ -113,6 +133,10 @@
         </div>
       </BalCard>
     </div>
+    <h3>Your unlocked staked tokens</h3>
+    <BalCard>
+      <BalTable :columns="unlockingColumns" :data="normalizedPurgatory"
+    /></BalCard>
   </div>
 </template>
 
@@ -128,7 +152,9 @@ import useTransactions from '@/composables/useTransactions';
 import { configService } from '@/services/config/config.service';
 import useWeb3 from '@/services/web3/useWeb3';
 import { BigNumber } from '@ethersproject/bignumber';
+import { ContractTransaction } from '@ethersproject/contracts';
 import { formatUnits, parseEther } from '@ethersproject/units';
+import { formatDistanceToNow } from 'date-fns';
 import { computed, defineComponent, ref, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -138,6 +164,8 @@ export default defineComponent({
   },
 
   setup() {
+    const formatBn = (bn: BigNumber) => formatUnits(bn);
+
     const { t } = useI18n();
     const { account } = useWeb3();
     const { getToken, balanceFor } = useTokens();
@@ -178,7 +206,7 @@ export default defineComponent({
     const normalizedPurgatory = computed(
       () =>
         stakingRewardsData.value?.locked.withdrawPurgatory?.map(
-          ({ amount, unlockTime }) => {
+          ([amount, unlockTime]) => {
             return {
               amount,
               unlockTime: new Date(unlockTime.toNumber() * 1000)
@@ -189,7 +217,7 @@ export default defineComponent({
 
     const unlocked = computed(() =>
       normalizedPurgatory.value
-        .filter(item => item.unlockTime.getTime() < Date.now() + 9999999999)
+        .filter(item => item.unlockTime.getTime() < Date.now())
         .reduce(
           (acc: BigNumber, { amount }) => acc.add(amount),
           BigNumber.from(0)
@@ -202,10 +230,14 @@ export default defineComponent({
         BigNumber.from(0)
     );
 
+    const availableForDepositType = computed(() =>
+      depositType.value === 'unlocked'
+        ? stakingRewardsData.value?.unlocked.stakedAmount
+        : unlocked.value ?? BigNumber.from(0)
+    );
+
     const locked = computed(
-      () =>
-        stakingRewardsData.value?.locked.stakedAmount.sub(unlocked.value) ??
-        BigNumber.from(0)
+      () => stakingRewardsData.value?.locked.stakedAmount ?? BigNumber.from(0)
     );
 
     const rewards = computed(
@@ -221,19 +253,32 @@ export default defineComponent({
       { value: 'withdraw', label: t('withdraw') }
     ];
 
+    const unlockingColumns = computed(() => [
+      {
+        name: t('amount'),
+        id: 'amount',
+        accessor: item => `${formatBn(item.amount)} HALT`
+      },
+      {
+        name: t('timeToUnlock'),
+        id: 'timeToUnlock',
+        accessor: item => formatDistanceToNow(item.unlockTime),
+        width: 300
+      }
+    ]);
+
     const activeTab = ref(tabs[0].value);
 
     const isDepositInputValid = ref(true);
     const isUnlockInputValid = ref(true);
     const isWithdrawInputValid = ref(true);
-    const amountToStake = ref('');
-    const amountToUnlock = ref('');
-    const amountToWithdraw = ref('');
+    const amountToStake = ref('0');
+    const amountToUnlock = ref('0');
+    const amountToWithdraw = ref('0');
 
     watchEffect(() => {
       amountToStake.value = balanceFor(halter.value?.address);
       amountToUnlock.value = formatUnits(locked.value);
-      amountToWithdraw.value = formatUnits(available.value);
     }, {});
 
     async function deposit() {
@@ -289,15 +334,50 @@ export default defineComponent({
       });
     }
 
-    const formatBn = (bn: BigNumber) => formatUnits(bn);
+    async function withdraw() {
+      let tx: ContractTransaction;
+      if (depositType.value === 'locked') {
+        tx = await lockedContract.value.withdrawUnlockedTokens();
+      } else {
+        const parsedValue = parseEther(amountToWithdraw.value);
+        if (parsedValue.isZero()) {
+          return;
+        }
+
+        tx = await unlockedContract.value.withdraw(
+          parsedValue,
+          currentWeek.value
+        );
+      }
+
+      addTransaction({
+        id: tx.hash,
+        type: 'tx',
+        action: 'withdraw',
+        summary: t('transactionSummary.withdraw'),
+        details: {
+          // contractAddress: contract.value.address
+        }
+      });
+
+      txListener(tx, {
+        onTxConfirmed: async () => {
+          refetchStakingRewards.value();
+        }
+      });
+    }
 
     return {
       activeTab,
       tabs,
+      unlockingColumns,
+      normalizedPurgatory,
       formatBn,
       halter,
       staked,
       available,
+      availableForDepositType,
+      unlocked,
       locked,
       rewards,
       requiresApproval,
@@ -309,7 +389,8 @@ export default defineComponent({
       amountToWithdraw,
       depositType,
       deposit,
-      unlock
+      unlock,
+      withdraw
     };
   }
 });

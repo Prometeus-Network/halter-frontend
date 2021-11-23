@@ -303,6 +303,7 @@
   "threeMonths": "3M",
   "time": "Time",
   "timeAgo": "{0} ago",
+  "timeToUnlock": "Time to unlock",
   "token": "Token",
   "tokenAlreadySelected": "Token Already Selected",
   "tokenInjected": "This token is injected",
@@ -403,8 +404,8 @@
     "claimBAL": "{0} BAL",
     "deposit": "Deposit to reward contract",
     "depositStaking": "Deposit to staking contract",
-    "unlockingStaking": "Unlocking staked tokens",
     "investInPool": "{0} in {1}",
+    "unlockingStaking": "Unlocking staked tokens",
     "withdrawFromPool": "{0} from {1}",
     "wrapUnwrap": "{0} {1} to {2}"
   },

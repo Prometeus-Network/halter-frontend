@@ -40,7 +40,7 @@
     "rewardToken": "0x4E9d833A5414877D7bA4E98d05c6249F6E2b0595",
     "tradeRewards": "0x0A572c1F4711502f8F656049F6f2f9153fEEF058",
     "stakeToken": "0xDa24d810E94114935c78FfB38F2d768e5c44dF7f",
-    "halterStakingLocked": "0x561a9176ddc74b1DdC3E3FB3DB5E740BdbBfCBAD",
+    "halterStakingLocked": "0xD9CB35D93bb5A601AD492462084D338B88386242",
     "halterStakingUnlocked": "0x77972706E37B221052DD55aBFb32B13966865313"
   },
   "liquidityRewards": {

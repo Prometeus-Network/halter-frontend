@@ -26,7 +26,6 @@
               >
               <span>$ 15.67</span>
             </div>
-            <BalBtn color="purple" outline>{{ $t('claim') }}</BalBtn>
             <div class="text-gray-500 text-xs"></div>
           </div>
         </BalCard>

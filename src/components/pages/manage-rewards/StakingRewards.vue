@@ -84,10 +84,7 @@ export default defineComponent({
   components: { RadialProgressBar },
 
   setup() {
-    const {
-      data: userRewardPoolsData,
-      isLoading: isLoadingUserRewardPools
-    } = useUserRewardPoolsQuery();
+    const { isLoading: isLoadingUserRewardPools } = useUserRewardPoolsQuery();
     const {
       data: stakingRewardsData,
       refetch: refetchStakingRewards

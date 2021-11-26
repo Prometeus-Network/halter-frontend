@@ -27,9 +27,7 @@
               <span>$ 15.67</span>
             </div>
             <BalBtn color="purple" outline>{{ $t('claim') }}</BalBtn>
-            <div class="text-gray-500 text-xs">
-              {{ $t('lockedRewardsWarning') }}
-            </div>
+            <div class="text-gray-500 text-xs"></div>
           </div>
         </BalCard>
       </div>
@@ -63,36 +61,27 @@
         </div>
       </BalCard>
     </div>
-    <div class="grid gap-y-4">
-      <h3>{{ $t('yourRewardPools') }}</h3>
-      <PoolsTable
-        :isLoading="isLoadingUserRewardPools"
-        :data="userRewardPools"
-        :noPoolsLabel="$t('noInvestments')"
-        showPoolShares
-        showEarnedRewards
-        :selectedTokens="[]"
-      />
-    </div>
   </div>
 </template>
 
 <script lang="ts">
-import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
-import RadialProgressBar from 'vue-radial-progress';
-import useUserRewardPoolsQuery from '@/composables/queries/useUserRewardPoolsQuery';
-import { defineComponent, computed } from 'vue';
-import useEthers from '@/composables/useEthers';
-import useStakingRewardsContracts from '@/composables/rewards/useStakingRewardsContract';
 import useStackingRewardsQuery from '@/composables/queries/useStakingRewardsQuery';
-import useTransactions from '@/composables/useTransactions';
-import useRewardsWeek from '@/composables/useRewardsWeek';
-import { BigNumber } from '@ethersproject/bignumber';
+import useUserRewardPoolsQuery from '@/composables/queries/useUserRewardPoolsQuery';
+import useStakingRewardsContracts from '@/composables/rewards/useStakingRewardsContract';
+import useEthers from '@/composables/useEthers';
 import useNumbers from '@/composables/useNumbers';
+import useRewardsWeek from '@/composables/useRewardsWeek';
+import useTransactions from '@/composables/useTransactions';
+import { BigNumber } from '@ethersproject/bignumber';
+import { computed, defineComponent, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import RadialProgressBar from 'vue-radial-progress';
+import { Transaction } from '@/components/modals/TransactionsPreviewModal.vue';
+import useNotifications from '@/composables/useNotifications';
 
 export default defineComponent({
   name: 'StakingRewards',
-  components: { PoolsTable, RadialProgressBar },
+  components: { RadialProgressBar },
 
   setup() {
     const {
@@ -108,6 +97,7 @@ export default defineComponent({
     const { addTransaction } = useTransactions();
     const { txListener } = useEthers();
     const { fNumToken } = useNumbers();
+    const { addErrorNotification } = useNotifications();
 
     const formatToken = (amount: string, decimals: number) =>
       fNumToken(amount, decimals);
@@ -130,13 +120,117 @@ export default defineComponent({
       totalRewards.value.sub(claimableRewards.value)
     );
 
+    const { t } = useI18n();
+    const transactions = ref<Transaction[]>([]);
+
+    async function claim() {
+      console.log('wow');
+      if (
+        stakingRewardsData.value?.unlocked.vestedRewards &&
+        stakingRewardsData.value?.locked.vestedRewards
+      ) {
+        transactions.value = [
+          {
+            title: t('claim'),
+            handler: async () => {
+              try {
+                const tx = await lockedContract.value.claimRewards(
+                  currentWeek.value.toString()
+                );
+
+                addTransaction({
+                  id: tx.hash,
+                  type: 'tx',
+                  action: 'claim',
+                  summary: t('transactionSummary.claimingRewards'),
+                  details: {
+                    contractAddress: lockedContract.value[0].address
+                  }
+                });
+              } catch (error) {
+                addErrorNotification((error as any)?.data.message);
+                console.error(error);
+              }
+            }
+          },
+          {
+            title: t('claim'),
+            handler: async () => {
+              try {
+                const tx = await unlockedContract.value.claimRewards(
+                  currentWeek.value.toString()
+                );
+
+                addTransaction({
+                  id: tx.hash,
+                  type: 'tx',
+                  action: 'claim',
+                  summary: t('transactionSummary.claimingRewards'),
+                  details: {
+                    contractAddress: unlockedContract.value[0].address
+                  }
+                });
+              } catch (error) {
+                addErrorNotification((error as any)?.data.message);
+                console.error(error);
+              }
+            }
+          },
+          {
+            title: t('claim'),
+            handler: async () => {
+              await claim();
+            }
+          }
+        ];
+      } else if (stakingRewardsData.value?.unlocked.vestedRewards) {
+        const tx = await unlockedContract.value.claimRewards(currentWeek.value);
+
+        addTransaction({
+          id: tx.hash,
+          type: 'tx',
+          action: 'claim',
+          summary: t('transactionSummary.claimingRewards'),
+          details: {
+            contractAddress: unlockedContract.value.address
+          }
+        });
+
+        txListener(tx, {
+          onTxConfirmed: async () => {
+            refetchStakingRewards.value();
+          }
+        });
+      } else if (stakingRewardsData.value?.locked.vestedRewards) {
+        const tx = await lockedContract.value.claimRewards(currentWeek.value);
+
+        addTransaction({
+          id: tx.hash,
+          type: 'tx',
+          action: 'claim',
+          summary: t('transactionSummary.claimingRewards'),
+          details: {
+            contractAddress: lockedContract.value.address
+          }
+        });
+
+        txListener(tx, {
+          onTxConfirmed: async () => {
+            refetchStakingRewards.value();
+          }
+        });
+      }
+    }
+    const completedSteps = 1;
+
     return {
       formatToken,
       isLoadingUserRewardPools,
       claimableRewards,
       totalRewards,
-      lockedRewards
-      //completedSteps
+      lockedRewards,
+      completedSteps,
+      claim
     };
   }
 });

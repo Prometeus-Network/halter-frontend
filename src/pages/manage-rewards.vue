@@ -10,7 +10,7 @@
       <h1>trading</h1>
     </template>
     <template v-if="activeTab === 'staking'">
-      <h1><staking-rewards /></h1>
+      <staking-rewards />
     </template>
   </div>
 </template>

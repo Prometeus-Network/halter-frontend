@@ -68,6 +68,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    console.log(props.transactions);
     const currentTransaction = ref(0);
     const isExecuting = ref(false);
 
@@ -78,7 +79,9 @@ export default defineComponent({
     async function confirm() {
       currentTransaction.value = 0;
       isExecuting.value = true;
+      console.log('Got into "confirm"');
       try {
+        console.log('Got into "confirm"');
         for (const transaction of props.transactions) {
           await transaction.handler();
           currentTransaction.value += 1;

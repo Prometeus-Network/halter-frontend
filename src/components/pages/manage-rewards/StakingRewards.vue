@@ -11,7 +11,9 @@
               >
               <span>$ 15.67</span>
             </div>
-            <BalBtn color="purple" outline>{{ $t('claim') }}</BalBtn>
+            <BalBtn color="purple" outline @click.prevent="claim">{{
+              $t('claim')
+            }}</BalBtn>
             <div class="text-gray-500 text-xs">
               {{ $t('availableToClaimWarning') }}
             </div>
@@ -61,6 +63,16 @@
       </BalCard>
     </div>
   </div>
+  <teleport to="#modal">
+    <transactions-preview-modal
+      v-if="modalTransactionsPreviewIsOpen"
+      :transactions="transactions"
+      @close="modalTransactionsPreviewIsOpen = false"
+      @success="modalTransactionsPreviewIsOpen = false"
+    >
+      {{ $t('withdrawTokensWarning') }}
+    </transactions-preview-modal>
+  </teleport>
 </template>
 
 <script lang="ts">
@@ -75,12 +87,14 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { computed, defineComponent, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import RadialProgressBar from 'vue-radial-progress';
-import { Transaction } from '@/components/modals/TransactionsPreviewModal.vue';
+import TransactionsPreviewModal, {
+  Transaction
+} from '@/components/modals/TransactionsPreviewModal.vue';
 import useNotifications from '@/composables/useNotifications';
 
 export default defineComponent({
   name: 'StakingRewards',
-  components: { RadialProgressBar },
+  components: { RadialProgressBar, TransactionsPreviewModal },
 
   setup() {
     const { isLoading: isLoadingUserRewardPools } = useUserRewardPoolsQuery();
@@ -118,29 +132,32 @@ export default defineComponent({
 
     const { t } = useI18n();
     const transactions = ref<Transaction[]>([]);
+    const modalTransactionsPreviewIsOpen = ref(false);
 
     async function claim() {
-      console.log('wow');
       if (
-        stakingRewardsData.value?.unlocked.vestedRewards &&
-        stakingRewardsData.value?.locked.vestedRewards
+        stakingRewardsData.value?.unlocked.vestedRewards.gt(
+          BigNumber.from('0')
+        ) &&
+        stakingRewardsData.value?.locked.vestedRewards.gt(BigNumber.from('0'))
       ) {
+        console.log(stakingRewardsData.value?.unlocked.vestedRewards);
+        console.log(stakingRewardsData.value?.locked.vestedRewards);
         transactions.value = [
           {
             title: t('claim'),
             handler: async () => {
               try {
                 const tx = await lockedContract.value.claimRewards(
-                  currentWeek.value.toString()
+                  currentWeek.value
                 );
-
                 addTransaction({
                   id: tx.hash,
                   type: 'tx',
                   action: 'claim',
-                  summary: t('transactionSummary.claimingRewards'),
+                  summary: t('transactionSummary.claimRewards'),
                   details: {
-                    contractAddress: lockedContract.value[0].address
+                    contractAddress: lockedContract.value.address
                   }
                 });
               } catch (error) {
@@ -163,7 +180,7 @@ export default defineComponent({
                   action: 'claim',
                   summary: t('transactionSummary.claimingRewards'),
                   details: {
-                    contractAddress: unlockedContract.value[0].address
+                    contractAddress: unlockedContract.value.address
                   }
                 });
               } catch (error) {
@@ -171,22 +188,18 @@ export default defineComponent({
                 console.error(error);
               }
             }
-          },
-          {
-            title: t('claim'),
-            handler: async () => {
-              await claim();
-            }
           }
         ];
-      } else if (stakingRewardsData.value?.unlocked.vestedRewards) {
+      } else if (
+        stakingRewardsData.value?.unlocked.vestedRewards.gt(BigNumber.from('0'))
+      ) {
         const tx = await unlockedContract.value.claimRewards(currentWeek.value);
 
         addTransaction({
           id: tx.hash,
           type: 'tx',
           action: 'claim',
-          summary: t('transactionSummary.claimingRewards'),
+          summary: t('transactionSummary.claimRewards'),
           details: {
             contractAddress: unlockedContract.value.address
           }
@@ -197,7 +210,9 @@ export default defineComponent({
             refetchStakingRewards.value();
           }
         });
-      } else if (stakingRewardsData.value?.locked.vestedRewards) {
+      } else if (
+        stakingRewardsData.value?.locked.vestedRewards.gt(BigNumber.from('0'))
+      ) {
         const tx = await lockedContract.value.claimRewards(currentWeek.value);
 
         addTransaction({
@@ -216,6 +231,7 @@ export default defineComponent({
           }
         });
       }
+      modalTransactionsPreviewIsOpen.value = true;
     }
     const completedSteps = 1;
 
@@ -226,7 +242,9 @@ export default defineComponent({
       totalRewards,
       lockedRewards,
       completedSteps,
-      claim
+      claim,
+      modalTransactionsPreviewIsOpen,
+      transactions
     };
   }
 });

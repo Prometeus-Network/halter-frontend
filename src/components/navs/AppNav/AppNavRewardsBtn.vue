@@ -13,7 +13,7 @@
         />
         <BalLoadingIcon size="sm" v-if="userClaimsLoading" />
         <span class="hidden lg:block" v-else>
-          {{ fNumToken(totalRewards) }} HALT
+          {{ /*fNumToken(totalRewards) */ 0 }} HALT
         </span>
       </BalBtn>
     </template>
@@ -23,7 +23,38 @@
           <div class="text-gray-500">{{ $t('totalRewards') }}:</div>
           <div class="flex justify-between">
             <span class="font-semibold"
-              >{{ fNumToken(totalRewards) }} HALT</span
+              >{{
+                /* TODO: add endpoint fNumToken(totalRewards)*/ 0
+              }}
+              HALT</span
+            >
+            <span>$ x.xx</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold"
+              >{{ fNumToken(totalRewardsUSDC) }} USDC</span
+            >
+            <span>$ x.xx</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-gray-500">{{ $t('Estimated rewards') }}:</div>
+          <div class="flex justify-between">
+            <span class="font-semibold"
+              >{{
+                /*fNumToken(totalRewards) TODO: add endpoint */ 0
+              }}
+              HALT</span
+            >
+            <span>$ x.xx</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold"
+              >{{
+                /*fNumToken(totalRewards) TODO: add endpoint */ 0
+              }}
+              USDC</span
             >
             <span>$ x.xx</span>
           </div>
@@ -33,7 +64,13 @@
           <div class="text-gray-500">{{ $t('availableToClaim') }}:</div>
           <div class="flex justify-between">
             <span class="font-semibold"
-              >{{ fNumToken(claimableRewards) }} HALT</span
+              >{{ /*fNumToken(claimableRewards)*/ 0 }} HALT</span
+            >
+            <span>$ x.xx</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold"
+              >{{ fNumToken(claimableRewardsUSDC) }} USDC</span
             >
             <span>$ x.xx</span>
           </div>
@@ -58,6 +95,7 @@ import useStakingRewardsQuery from '@/composables/queries/useStakingRewardsQuery
 import useTradingRewardsQuery from '@/composables/queries/useTradingRewardsQuery';
 import useWeb3 from '@/services/web3/useWeb3';
 import { computed, defineComponent } from 'vue';
+import { BigNumber } from '@ethersproject/bignumber';
 
 export default defineComponent({
   name: 'AppNavActivityBtn',
@@ -76,23 +114,30 @@ export default defineComponent({
     const { data: stakingRewardsData } = useStakingRewardsQuery();
     const { data: tradingRewardsData } = useTradingRewardsQuery();
 
-    const totalRewards = computed(() =>
-      total.value
-        .add(stakingRewardsData.value?.locked.totalRewards ?? 0)
-        .add(stakingRewardsData.value?.unlocked.totalRewards ?? 0)
-        .add(tradingRewardsData.value?.totalRewards ?? 0)
-    );
-
-    const claimableRewards = computed(() =>
-      claimable.value
+    const claimableRewardsUSDC = computed(() =>
+      BigNumber.from(0)
         .add(stakingRewardsData.value?.locked.vestedRewards ?? 0)
         .add(stakingRewardsData.value?.unlocked.vestedRewards ?? 0)
-        .add(tradingRewardsData.value?.claimableRewards ?? 0)
+    );
+    const totalRewardsUSDC = computed(() =>
+      BigNumber.from(0)
+        .add(stakingRewardsData.value?.locked.totalRewards ?? 0)
+        .add(stakingRewardsData.value?.unlocked.totalRewards ?? 0)
+    );
+
+    const totalRewardsHalt = computed(() =>
+      total.value.add(tradingRewardsData.value?.claimableRewards ?? 0)
+    );
+
+    const claimableRewardsHalt = computed(() =>
+      claimable.value.add(tradingRewardsData.value?.totalRewards ?? 0)
     );
 
     return {
-      totalRewards,
-      claimableRewards,
+      totalRewardsHalt,
+      claimableRewardsHalt,
+      totalRewardsUSDC,
+      claimableRewardsUSDC,
       account,
       profile,
       upToLargeBreakpoint,

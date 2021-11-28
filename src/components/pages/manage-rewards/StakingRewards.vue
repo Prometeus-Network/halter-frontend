@@ -1,8 +1,8 @@
 <template>
   <div class="grid grid-cols-1 gap-y-12">
-    <div class="info-wrapper">
-      <div class="grid grid-cols-1 gap-y-8">
-        <BalCard>
+    <div class="info-wrapper gap-y-8">
+      <div class="grid md:col-start-1 md:col-end-3 gap-y-8">
+        <BalCard growContent>
           <div class="grid grid-cols-1 gap-y-4">
             <h3>{{ $t('availableToClaim') }}</h3>
             <div class="flex justify-between items-end">
@@ -19,7 +19,7 @@
             </div>
           </div>
         </BalCard>
-        <BalCard>
+        <BalCard growContent>
           <div class="grid grid-cols-1 gap-y-4">
             <h3>{{ $t('lockedRewards') }}</h3>
             <div class="flex justify-between items-end">
@@ -32,18 +32,17 @@
           </div>
         </BalCard>
       </div>
-      <BalCard growContent>
-        <div class="grid grid-cols-2 h-full items-center justify-items-center">
-          <radial-progress-bar
-            diameter="350"
-            strokeLinecap="butt"
-            strokeWidth="20"
-            innerStrokeWidth="20"
-            startColor="#D742FF"
-            stopColor="#1B52EB"
-            innerStrokeColor="#E9E9F4"
-            :completed-steps="completedSteps"
-            total-steps="100"
+      <BalCard growContent class="md:col-start-4 md:col-end-9">
+        <div
+          class="grid gap-y-8 py-8 md:py-0 md:grid-cols-2 h-full items-center justify-items-center"
+        >
+          <ve-progress
+            line="butt"
+            :color="completedSteps ? gradient : 'transparent'"
+            :thickness="32"
+            :emptyThickness="30"
+            :progress="completedSteps"
+            :size="350"
           >
             <div class="text-center">
               <h3>{{ $t('totalRewards') }}</h3>
@@ -52,7 +51,7 @@
               </div>
               <div>$ 151.67</div>
             </div>
-          </radial-progress-bar>
+          </ve-progress>
           <div class="legend-grid">
             <div class="w-8 h-8 gradient-purple-diagonal rounded-full"></div>
             <div>{{ $t('availableToClaim') }}</div>
@@ -86,7 +85,6 @@ import useTransactions from '@/composables/useTransactions';
 import { BigNumber } from '@ethersproject/bignumber';
 import { computed, defineComponent, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import RadialProgressBar from 'vue-radial-progress';
 import TransactionsPreviewModal, {
   Transaction
 } from '@/components/modals/TransactionsPreviewModal.vue';
@@ -94,7 +92,7 @@ import useNotifications from '@/composables/useNotifications';
 
 export default defineComponent({
   name: 'StakingRewards',
-  components: { RadialProgressBar, TransactionsPreviewModal },
+  components: { TransactionsPreviewModal },
 
   setup() {
     const { isLoading: isLoadingUserRewardPools } = useUserRewardPoolsQuery();
@@ -136,13 +134,9 @@ export default defineComponent({
 
     async function claim() {
       if (
-        stakingRewardsData.value?.unlocked.vestedRewards.gt(
-          BigNumber.from('0')
-        ) &&
-        stakingRewardsData.value?.locked.vestedRewards.gt(BigNumber.from('0'))
+        stakingRewardsData.value?.unlocked.vestedRewards.gt(0) &&
+        stakingRewardsData.value?.locked.vestedRewards.gt(0)
       ) {
-        console.log(stakingRewardsData.value?.unlocked.vestedRewards);
-        console.log(stakingRewardsData.value?.locked.vestedRewards);
         transactions.value = [
           {
             title: t('claim'),
@@ -151,6 +145,7 @@ export default defineComponent({
                 const tx = await lockedContract.value.claimRewards(
                   currentWeek.value
                 );
+
                 addTransaction({
                   id: tx.hash,
                   type: 'tx',
@@ -161,7 +156,7 @@ export default defineComponent({
                   }
                 });
               } catch (error) {
-                addErrorNotification((error as any)?.data.message);
+                addErrorNotification((error as any)?.data?.message);
                 console.error(error);
               }
             }
@@ -184,7 +179,7 @@ export default defineComponent({
                   }
                 });
               } catch (error) {
-                addErrorNotification((error as any)?.data.message);
+                addErrorNotification((error as any)?.data?.message);
                 console.error(error);
               }
             }
@@ -233,7 +228,37 @@ export default defineComponent({
       }
       modalTransactionsPreviewIsOpen.value = true;
     }
-    const completedSteps = 1;
+    const completedSteps = computed(() => {
+      if (totalRewards.value.isZero()) {
+        return 0;
+      }
+
+      const ratio = claimableRewards.value.div(totalRewards.value).mul(100);
+
+      return ratio.gt(0) && ratio.gt(1) ? ratio.toNumber() : 0;
+    });
+
+    const gradient = {
+      radial: false,
+      colors: [
+        {
+          color: '#D742FF',
+          offset: '0',
+          opacity: '1'
+        },
+
+        {
+          color: '#1B52EB',
+          offset: '70',
+          opacity: '1'
+        },
+        {
+          color: '#D742FF',
+          offset: '100',
+          opacity: '1'
+        }
+      ]
+    };
 
     return {
       formatToken,
@@ -244,7 +269,8 @@ export default defineComponent({
       completedSteps,
       claim,
       modalTransactionsPreviewIsOpen,
-      transactions
+      transactions,
+      gradient
     };
   }
 });
@@ -252,9 +278,7 @@ export default defineComponent({
 
 <style scoped>
 .info-wrapper {
-  @apply grid;
-  grid-template-columns: 22rem 1fr;
-  column-gap: 9rem;
+  @apply grid md:grid-cols-8 grid-cols-1;
 }
 
 .legend-grid {

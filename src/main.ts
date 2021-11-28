@@ -27,6 +27,7 @@ import '@/assets/css/index.css';
 import 'vue3-virtual-scroller/dist/vue3-virtual-scroller.css';
 import { Web3Provider } from '@ethersproject/providers';
 import VueKinesis from 'vue-kinesis';
+import VueEllipseProgress from 'vue-ellipse-progress';
 import Root from './Root';
 
 use([
@@ -42,6 +43,7 @@ use([
 ]);
 
 const app = createApp(Root)
+  .use(VueEllipseProgress)
   .use(i18n)
   .use(router)
   .use(store)

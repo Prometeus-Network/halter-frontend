@@ -1,8 +1,13 @@
 <template>
-  <div class="lg:container lg:mx-auto pt-10 md:pt-12">
-    <h2>{{ $t('manageYourRewards') }}</h2>
+  <div class="lg:container lg:mx-auto pt-10 md:pt-12 pb-8 md:pb-0">
+    <h2 class="px-4 md:px-0">{{ $t('manageYourRewards') }}</h2>
 
-    <BalTabs v-model="activeTab" :tabs="tabs" class="pt-4 mb-6" no-pad />
+    <BalTabs
+      v-model="activeTab"
+      :tabs="tabs"
+      class="pt-4 mb-6 px-4 md:px-0 text-center w-full"
+      no-pad
+    />
     <template v-if="activeTab === 'liquidity'">
       <liquidity-rewards />
     </template>

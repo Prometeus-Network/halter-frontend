@@ -56,6 +56,10 @@ class RewardsService {
     });
   }
 
+  async reset() {
+    return this.axiosClient.post('/app/reset');
+  }
+
   async payOutTrading(phase: number) {
     return this.axiosClient.post('/trading/payout', { phase });
   }

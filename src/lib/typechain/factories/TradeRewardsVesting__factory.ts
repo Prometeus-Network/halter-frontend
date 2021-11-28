@@ -156,6 +156,19 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "COEFF",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "DEFAULT_ADMIN_ROLE",
     outputs: [
       {
@@ -215,12 +228,7 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_aPSNumerator",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_aPSDenominator",
+        name: "_rewardRate",
         type: "uint256",
       },
       {
@@ -602,12 +610,7 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "aPSNumerator",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "aPSDenominator",
+        name: "rewardRate",
         type: "uint256",
       },
       {

@@ -26,11 +26,12 @@ import type {
 
 export interface TradeRewardsVestingInterface extends ethers.utils.Interface {
   functions: {
+    "COEFF()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "TREASURY_ROLE()": FunctionFragment;
     "UPDATER_ROLE()": FunctionFragment;
     "addEvent(uint256,uint256)": FunctionFragment;
-    "addVesting(uint256,uint256,address,uint256,uint256)": FunctionFragment;
+    "addVesting(uint256,address,uint256,uint256)": FunctionFragment;
     "calculateAllClaims()": FunctionFragment;
     "calculateClaim(uint256)": FunctionFragment;
     "claimReward()": FunctionFragment;
@@ -54,6 +55,7 @@ export interface TradeRewardsVestingInterface extends ethers.utils.Interface {
     "vestings(address,uint256)": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "COEFF", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "DEFAULT_ADMIN_ROLE",
     values?: undefined
@@ -72,7 +74,7 @@ export interface TradeRewardsVestingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "addVesting",
-    values: [BigNumberish, BigNumberish, string, BigNumberish, BigNumberish]
+    values: [BigNumberish, string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "calculateAllClaims",
@@ -153,6 +155,7 @@ export interface TradeRewardsVestingInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
 
+  decodeFunctionResult(functionFragment: "COEFF", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "DEFAULT_ADMIN_ROLE",
     data: BytesLike
@@ -316,6 +319,8 @@ export interface TradeRewardsVesting extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    COEFF(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     TREASURY_ROLE(overrides?: CallOverrides): Promise<[string]>;
@@ -329,8 +334,7 @@ export interface TradeRewardsVesting extends BaseContract {
     ): Promise<ContractTransaction>;
 
     addVesting(
-      _aPSNumerator: BigNumberish,
-      _aPSDenominator: BigNumberish,
+      _rewardRate: BigNumberish,
       _paymentAddress: string,
       _pid: BigNumberish,
       _totalAmountOfSeconds: BigNumberish,
@@ -435,17 +439,8 @@ export interface TradeRewardsVesting extends BaseContract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        aPSNumerator: BigNumber;
-        aPSDenominator: BigNumber;
+      [BigNumber, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+        rewardRate: BigNumber;
         paymentAddress: string;
         lastPayment: BigNumber;
         totalAmountOfSeconds: BigNumber;
@@ -454,6 +449,8 @@ export interface TradeRewardsVesting extends BaseContract {
       }
     >;
   };
+
+  COEFF(overrides?: CallOverrides): Promise<BigNumber>;
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
@@ -468,8 +465,7 @@ export interface TradeRewardsVesting extends BaseContract {
   ): Promise<ContractTransaction>;
 
   addVesting(
-    _aPSNumerator: BigNumberish,
-    _aPSDenominator: BigNumberish,
+    _rewardRate: BigNumberish,
     _paymentAddress: string,
     _pid: BigNumberish,
     _totalAmountOfSeconds: BigNumberish,
@@ -568,17 +564,8 @@ export interface TradeRewardsVesting extends BaseContract {
     arg1: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [
-      BigNumber,
-      BigNumber,
-      string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber
-    ] & {
-      aPSNumerator: BigNumber;
-      aPSDenominator: BigNumber;
+    [BigNumber, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      rewardRate: BigNumber;
       paymentAddress: string;
       lastPayment: BigNumber;
       totalAmountOfSeconds: BigNumber;
@@ -588,6 +575,8 @@ export interface TradeRewardsVesting extends BaseContract {
   >;
 
   callStatic: {
+    COEFF(overrides?: CallOverrides): Promise<BigNumber>;
+
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
     TREASURY_ROLE(overrides?: CallOverrides): Promise<string>;
@@ -601,8 +590,7 @@ export interface TradeRewardsVesting extends BaseContract {
     ): Promise<void>;
 
     addVesting(
-      _aPSNumerator: BigNumberish,
-      _aPSDenominator: BigNumberish,
+      _rewardRate: BigNumberish,
       _paymentAddress: string,
       _pid: BigNumberish,
       _totalAmountOfSeconds: BigNumberish,
@@ -697,17 +685,8 @@ export interface TradeRewardsVesting extends BaseContract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [
-        BigNumber,
-        BigNumber,
-        string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber
-      ] & {
-        aPSNumerator: BigNumber;
-        aPSDenominator: BigNumber;
+      [BigNumber, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+        rewardRate: BigNumber;
         paymentAddress: string;
         lastPayment: BigNumber;
         totalAmountOfSeconds: BigNumber;
@@ -784,6 +763,8 @@ export interface TradeRewardsVesting extends BaseContract {
   };
 
   estimateGas: {
+    COEFF(overrides?: CallOverrides): Promise<BigNumber>;
+
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     TREASURY_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
@@ -797,8 +778,7 @@ export interface TradeRewardsVesting extends BaseContract {
     ): Promise<BigNumber>;
 
     addVesting(
-      _aPSNumerator: BigNumberish,
-      _aPSDenominator: BigNumberish,
+      _rewardRate: BigNumberish,
       _paymentAddress: string,
       _pid: BigNumberish,
       _totalAmountOfSeconds: BigNumberish,
@@ -898,6 +878,8 @@ export interface TradeRewardsVesting extends BaseContract {
   };
 
   populateTransaction: {
+    COEFF(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     DEFAULT_ADMIN_ROLE(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -913,8 +895,7 @@ export interface TradeRewardsVesting extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     addVesting(
-      _aPSNumerator: BigNumberish,
-      _aPSDenominator: BigNumberish,
+      _rewardRate: BigNumberish,
       _paymentAddress: string,
       _pid: BigNumberish,
       _totalAmountOfSeconds: BigNumberish,

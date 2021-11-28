@@ -20,6 +20,10 @@
     <div v-if="state.user" class="w-full">
       <h2 class="mb-2">Rewards distribution</h2>
 
+      <BalBtn @click="reset()" class="mb-4 float-right"
+        >Reset and calculate again</BalBtn
+      >
+
       <bal-card class="w-full">
         <bal-select-input
           :options="phases"
@@ -168,6 +172,11 @@ export default defineComponent({
       fetchRewards(parseInt(activePhase.value, 10));
     });
 
+    const reset = async () => {
+      await rewardsService.reset();
+      return await fetchRewards(parseInt(activePhase.value, 10));
+    };
+
     const authorize = async () => {
       state.loading = true;
 
@@ -205,7 +214,8 @@ export default defineComponent({
       activeTab,
       phases,
       activePhase,
-      payOutTrading
+      payOutTrading,
+      reset
     };
   }
 });

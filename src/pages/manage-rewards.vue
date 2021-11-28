@@ -12,7 +12,7 @@
       <liquidity-rewards />
     </template>
     <template v-if="activeTab === 'trading'">
-      <h1>trading</h1>
+      <trading-rewards />
     </template>
     <template v-if="activeTab === 'staking'">
       <staking-rewards />
@@ -23,13 +23,15 @@
 <script lang="ts">
 import LiquidityRewards from '@/components/pages/manage-rewards/LiquidityRewards.vue';
 import StakingRewards from '@/components/pages/manage-rewards/StakingRewards.vue';
+import TradingRewards from '@/components/pages/manage-rewards/TradingRewards.vue';
 import { defineComponent, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   components: {
     LiquidityRewards,
-    StakingRewards
+    StakingRewards,
+    TradingRewards
   },
 
   setup() {

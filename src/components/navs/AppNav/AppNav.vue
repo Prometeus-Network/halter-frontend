@@ -10,7 +10,7 @@
           <AppIcon v-if="['xs', 'sm', 'md'].includes(bp)" />
           <AppLogo v-else />
         </router-link>
-        <DarkModeToggle v-if="!upToLargeBreakpoint" class="ml-2" />
+        <DarkModeToggle class="ml-2" />
       </div>
 
       <div

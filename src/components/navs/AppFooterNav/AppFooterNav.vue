@@ -1,14 +1,8 @@
 <template>
   <div class="app-nav-footer">
     <div class="app-nav-footer-container">
-      <div class="w-1/3 pl-2">
-        <DarkModeToggle circle />
-      </div>
-      <div class="w-1/3 flex justify-center">
+      <div class="w-full flex justify-center">
         <AppNavToggle darkModeBg="700" />
-      </div>
-      <div class="w-1/3 flex justify-end pr-2">
-        <IntercomToggle circle />
       </div>
     </div>
   </div>
@@ -17,16 +11,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import AppNavToggle from '@/components/navs/AppNav/AppNavToggle.vue';
-import DarkModeToggle from '@/components/btns/DarkModeToggle.vue';
-import IntercomToggle from '@/components/btns/IntercomToggle.vue';
 
 export default defineComponent({
   name: 'AppFooterNav',
 
   components: {
-    AppNavToggle,
-    DarkModeToggle,
-    IntercomToggle
+    AppNavToggle
   }
 });
 </script>

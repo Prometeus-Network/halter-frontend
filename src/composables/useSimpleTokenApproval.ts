@@ -2,7 +2,7 @@ import { ERC20__factory } from '@/lib/typechain';
 import useWeb3 from '@/services/web3/useWeb3';
 import { TokenInfo } from '@/types/TokenList';
 import { BigNumber } from '@ethersproject/bignumber';
-import { computed, reactive, Ref, isRef, watchEffect } from 'vue';
+import { computed, reactive, Ref, isRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useMutation, useQuery } from 'vue-query';
 import useEthers from './useEthers';

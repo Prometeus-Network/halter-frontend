@@ -1,8 +1,10 @@
 <template>
-  <div class="lg:container lg:mx-auto pt-10 md:pt-12 grid gap-y-8">
-    <h2>Stacking</h2>
-    <div class="flex justify-between items-start">
-      <div class="grid gap-y-6">
+  <div
+    class="lg:container lg:mx-auto pt-10 md:pt-12 grid gap-y-8 pb-10 md:pb-0"
+  >
+    <h2 class="px-4 md:px-0">Stacking</h2>
+    <div class="flex justify-between items-start flex-col md:flex-row gap-10">
+      <div class="grid gap-y-6 px-4 md:px-0 pb-0 md:pb-36">
         <div>Stake your HALT tokens and start earn rewards.</div>
         <div>
           <h3>You have staked</h3>
@@ -21,7 +23,7 @@
           <h3 class="text-purple-500">{{ formatBn(rewards) }} USDC</h3>
         </div>
       </div>
-      <BalCard>
+      <BalCard class="w-full max-w-md">
         <div class="action-container">
           <BalTabs :tabs="tabs" v-model="activeTab" />
           <template v-if="activeTab === 'deposit'">
@@ -133,7 +135,7 @@
         </div>
       </BalCard>
     </div>
-    <h3>Your unlocked staked tokens</h3>
+    <h3 class="px-4 md:px-0">Your unlocked staked tokens</h3>
     <BalCard>
       <BalTable :columns="unlockingColumns" :data="normalizedPurgatory"
     /></BalCard>
@@ -169,6 +171,7 @@ export default defineComponent({
     const { t } = useI18n();
     const { account } = useWeb3();
     const { getToken, balanceFor } = useTokens();
+
     const {
       data: stakingRewardsData,
       refetch: refetchStakingRewards
@@ -263,7 +266,7 @@ export default defineComponent({
         name: t('timeToUnlock'),
         id: 'timeToUnlock',
         accessor: item => formatDistanceToNow(item.unlockTime),
-        width: 300
+        align: 'right'
       }
     ]);
 
@@ -399,7 +402,6 @@ export default defineComponent({
 <style scoped>
 .action-container {
   @apply grid gap-y-4;
-  width: 30rem;
 }
 </style>
 

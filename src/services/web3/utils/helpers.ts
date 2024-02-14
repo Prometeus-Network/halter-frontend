@@ -21,6 +21,7 @@ export async function switchToAppNetwork(provider: ExternalProvider) {
     if (err.code === 4902) {
       return importNetworkDetailsToWallet(provider);
     }
+    console.error('switch request: ', err);
   }
   return false;
 }

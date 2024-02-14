@@ -26,8 +26,11 @@ export default class BalancerSubgraphService {
 
   public get blockTime(): number {
     switch (NETWORK) {
-      case '4002': {
-        return 2;
+      // case '4002': {
+      //   return 2;
+      // }
+      case '168587773': {
+        return 13;
       }
       case '1':
         return 13;

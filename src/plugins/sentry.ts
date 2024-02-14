@@ -8,14 +8,15 @@ import { version } from '../../package.json';
 // https://github.com/getsentry/sentry-javascript/issues/2925
 
 const ENV = process.env.VUE_APP_ENV || 'development';
-const NETWORK = process.env.VUE_APP_NETWORK || '4002';
+const NETWORK = process.env.VUE_APP_NETWORK || '168587773';
 const networkMap = {
-  '1': 'mainnet',
-  '42': 'kovan',
-  '137': 'polygon',
-  '42161': 'arbitrum-one',
-  '250': 'fantom',
-  '4002': 'fantom-testnet'
+  // '1': 'mainnet',
+  // '42': 'kovan',
+  // '137': 'polygon',
+  // '42161': 'arbitrum-one',
+  // '250': 'fantom',
+  // '4002': 'fantom-testnet',
+  '168587773': 'blast-testnet'
 };
 const environment = `${ENV}-${networkMap[NETWORK]}`;
 const release = `frontend-v2@${version}`;

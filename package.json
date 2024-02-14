@@ -112,5 +112,8 @@
     "vue-loader": "^16.5.0"
   },
   "license": "MIT",
-  "repository": "halter-core/halter-frontend"
+  "repository": "halter-core/halter-frontend",
+  "volta": {
+    "node": "16.20.2"
+  }
 }

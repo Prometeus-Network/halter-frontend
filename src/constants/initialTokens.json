@@ -18,5 +18,9 @@
   "4002": {
     "input": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     "output": "0x69EC300F39d9a384e30f47A8168cF1A0465bc513"
+  },
+  "168587773": {
+    "input": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "output": "0x69EC300F39d9a384e30f47A8168cF1A0465bc513"
   }
 }

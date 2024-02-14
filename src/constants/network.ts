@@ -1,4 +1,4 @@
-export type NetworkId = 1 | 3 | 4 | 5 | 42 | 137 | 42161 | 250 | 4002;
+export type NetworkId = 1 | 3 | 4 | 5 | 42 | 137 | 42161 | 250 | 168587773;
 
 export enum Network {
   MAINNET = 1,
@@ -9,7 +9,8 @@ export enum Network {
   POLYGON = 137,
   ARBITRUM = 42161,
   FANTOM = 250,
-  FANTOM_TESTNET = 4002
+
+  BLAST_TESTNET = 168587773
 }
 
 export const APP_NETWORK_ID = Number(process.env.VUE_APP_NETWORK) as NetworkId;

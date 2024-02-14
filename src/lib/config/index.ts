@@ -1,5 +1,5 @@
 import docker from './docker.json';
-import fantomTestnet from './testnet.json';
+import blastTestnet from './testnet.json';
 
 export interface Config {
   key: string;
@@ -68,7 +68,8 @@ const config: Record<string, Config> = {
   // '137': polygon,
   // '42161': arbitrum,
   // '12345': test,
-  '4002': fantomTestnet,
+  // '4002': blastTestnet,
+  '168587773': blastTestnet,
   // @ts-ignore
   '17': docker
 };

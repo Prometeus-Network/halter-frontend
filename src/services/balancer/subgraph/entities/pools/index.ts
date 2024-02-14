@@ -56,6 +56,7 @@ export default class Pools {
   ): Promise<DecoratedPool[]> {
     // Get past state of pools
     const blockNumber = await this.timeTravelBlock(period);
+    console.log('BLOCK :', blockNumber);
     const block = { number: blockNumber };
     const isInPoolIds = { id_in: pools.map(pool => pool.id) };
     const pastPoolsQuery = this.query({ where: isInPoolIds, block });
@@ -227,9 +228,8 @@ export default class Pools {
 
   private async timeTravelBlock(period: TimeTravelPeriod): Promise<number> {
     const currentBlock = await this.service.rpcProviderService.getBlockNumber();
-    const blocksInDay = Math.round(
-      twentyFourHoursInSecs / this.service.blockTime
-    );
+    console.log('BLOCK TIME:', this.service.blockTime);
+    const blocksInDay = Math.round(twentyFourHoursInSecs / 245);
 
     switch (period) {
       case '24h':

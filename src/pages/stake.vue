@@ -199,12 +199,7 @@ export default defineComponent({
       selectedContract
     );
 
-    const staked = computed(
-      () =>
-        stakingRewardsData.value?.unlocked.stakedAmount.add(
-          stakingRewardsData.value.locked.stakedAmount
-        ) ?? BigNumber.from(0)
-    );
+    const staked = computed(() => BigNumber.from(0));
 
     const normalizedPurgatory = computed(
       () =>
@@ -227,11 +222,7 @@ export default defineComponent({
         )
     );
 
-    const available = computed(
-      () =>
-        stakingRewardsData.value?.unlocked.stakedAmount.add(unlocked.value) ??
-        BigNumber.from(0)
-    );
+    const available = computed(() => BigNumber.from(0));
 
     const availableForDepositType = computed(() =>
       depositType.value === 'unlocked'
@@ -243,12 +234,7 @@ export default defineComponent({
       () => stakingRewardsData.value?.locked.stakedAmount ?? BigNumber.from(0)
     );
 
-    const rewards = computed(
-      () =>
-        stakingRewardsData.value?.locked.vestedRewards.add(
-          stakingRewardsData.value?.unlocked.vestedRewards
-        ) ?? BigNumber.from(0)
-    );
+    const rewards = computed(() => BigNumber.from(0));
 
     const tabs = [
       { value: 'deposit', label: t('deposit') },

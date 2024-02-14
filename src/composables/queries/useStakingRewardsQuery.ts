@@ -39,20 +39,7 @@ export default function useStackingRewardsQuery(options: UseQueryOptions = {}) {
             stakedAmount,
             totalRewards,
             vestedRewards
-          ] = await Promise.all([
-            defaultIfCatch(
-              stakingContract.userStaked(account.value),
-              BigNumber.from(0)
-            ),
-            defaultIfCatch(
-              stakingContract.viewTotalRewards(currentWeek.value),
-              BigNumber.from(0)
-            ),
-            defaultIfCatch(
-              stakingContract.viewVestedRewards(currentWeek.value),
-              BigNumber.from(0)
-            )
-          ]);
+          ] = await Promise.all([0, 0, 0]);
 
           return {
             stakedAmount,

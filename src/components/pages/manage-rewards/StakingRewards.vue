@@ -110,19 +110,9 @@ export default defineComponent({
     const formatToken = (amount: string, decimals: number) =>
       fNumToken(amount, decimals);
 
-    const totalRewards = computed(
-      () =>
-        stakingRewardsData.value?.unlocked.totalRewards.add(
-          stakingRewardsData.value?.locked.totalRewards
-        ) ?? BigNumber.from(0)
-    );
+    const totalRewards = computed(() => BigNumber.from(0));
 
-    const claimableRewards = computed(
-      () =>
-        stakingRewardsData.value?.unlocked.vestedRewards.add(
-          stakingRewardsData.value?.locked.vestedRewards
-        ) ?? BigNumber.from(0)
-    );
+    const claimableRewards = computed(() => BigNumber.from(0));
 
     const lockedRewards = computed(() =>
       totalRewards.value.sub(claimableRewards.value)
@@ -133,99 +123,99 @@ export default defineComponent({
     const modalTransactionsPreviewIsOpen = ref(false);
 
     async function claim() {
-      if (
-        stakingRewardsData.value?.unlocked.vestedRewards.gt(0) &&
-        stakingRewardsData.value?.locked.vestedRewards.gt(0)
-      ) {
-        transactions.value = [
-          {
-            title: t('claim'),
-            handler: async () => {
-              try {
-                const tx = await lockedContract.value.claimRewards(
-                  currentWeek.value
-                );
+      // if (
+      //   stakingRewardsData.value?.unlocked.vestedRewards.gt(0) &&
+      //   stakingRewardsData.value?.locked.vestedRewards.gt(0)
+      // ) {
+      //   transactions.value = [
+      //     {
+      //       title: t('claim'),
+      //       handler: async () => {
+      //         try {
+      //           const tx = await lockedContract.value.claimRewards(
+      //             currentWeek.value
+      //           );
 
-                addTransaction({
-                  id: tx.hash,
-                  type: 'tx',
-                  action: 'claim',
-                  summary: t('transactionSummary.claimRewards'),
-                  details: {
-                    contractAddress: lockedContract.value.address
-                  }
-                });
-              } catch (error) {
-                addErrorNotification((error as any)?.data?.message);
-                console.error(error);
-              }
-            }
-          },
-          {
-            title: t('claim'),
-            handler: async () => {
-              try {
-                const tx = await unlockedContract.value.claimRewards(
-                  currentWeek.value.toString()
-                );
+      //           addTransaction({
+      //             id: tx.hash,
+      //             type: 'tx',
+      //             action: 'claim',
+      //             summary: t('transactionSummary.claimRewards'),
+      //             details: {
+      //               contractAddress: lockedContract.value.address
+      //             }
+      //           });
+      //         } catch (error) {
+      //           addErrorNotification((error as any)?.data?.message);
+      //           console.error(error);
+      //         }
+      //       }
+      //     },
+      //     {
+      //       title: t('claim'),
+      //       handler: async () => {
+      //         try {
+      //           const tx = await unlockedContract.value.claimRewards(
+      //             currentWeek.value.toString()
+      //           );
 
-                addTransaction({
-                  id: tx.hash,
-                  type: 'tx',
-                  action: 'claim',
-                  summary: t('transactionSummary.claimingRewards'),
-                  details: {
-                    contractAddress: unlockedContract.value.address
-                  }
-                });
-              } catch (error) {
-                addErrorNotification((error as any)?.data?.message);
-                console.error(error);
-              }
-            }
-          }
-        ];
-      } else if (
-        stakingRewardsData.value?.unlocked.vestedRewards.gt(BigNumber.from('0'))
-      ) {
-        const tx = await unlockedContract.value.claimRewards(currentWeek.value);
+      //           addTransaction({
+      //             id: tx.hash,
+      //             type: 'tx',
+      //             action: 'claim',
+      //             summary: t('transactionSummary.claimingRewards'),
+      //             details: {
+      //               contractAddress: unlockedContract.value.address
+      //             }
+      //           });
+      //         } catch (error) {
+      //           addErrorNotification((error as any)?.data?.message);
+      //           console.error(error);
+      //         }
+      //       }
+      //     }
+      //   ];
+      // } else if (
+      //   stakingRewardsData.value?.unlocked.vestedRewards.gt(BigNumber.from('0'))
+      // ) {
+      //   const tx = await unlockedContract.value.claimRewards(currentWeek.value);
 
-        addTransaction({
-          id: tx.hash,
-          type: 'tx',
-          action: 'claim',
-          summary: t('transactionSummary.claimRewards'),
-          details: {
-            contractAddress: unlockedContract.value.address
-          }
-        });
+      //   addTransaction({
+      //     id: tx.hash,
+      //     type: 'tx',
+      //     action: 'claim',
+      //     summary: t('transactionSummary.claimRewards'),
+      //     details: {
+      //       contractAddress: unlockedContract.value.address
+      //     }
+      //   });
 
-        txListener(tx, {
-          onTxConfirmed: async () => {
-            refetchStakingRewards.value();
-          }
-        });
-      } else if (
-        stakingRewardsData.value?.locked.vestedRewards.gt(BigNumber.from('0'))
-      ) {
-        const tx = await lockedContract.value.claimRewards(currentWeek.value);
+      //   txListener(tx, {
+      //     onTxConfirmed: async () => {
+      //       refetchStakingRewards.value();
+      //     }
+      //   });
+      // } else if (
+      //   stakingRewardsData.value?.locked.vestedRewards.gt(BigNumber.from('0'))
+      // ) {
+      //   const tx = await lockedContract.value.claimRewards(currentWeek.value);
 
-        addTransaction({
-          id: tx.hash,
-          type: 'tx',
-          action: 'claim',
-          summary: t('transactionSummary.claimingRewards'),
-          details: {
-            contractAddress: lockedContract.value.address
-          }
-        });
+      //   addTransaction({
+      //     id: tx.hash,
+      //     type: 'tx',
+      //     action: 'claim',
+      //     summary: t('transactionSummary.claimingRewards'),
+      //     details: {
+      //       contractAddress: lockedContract.value.address
+      //     }
+      //   });
 
-        txListener(tx, {
-          onTxConfirmed: async () => {
-            refetchStakingRewards.value();
-          }
-        });
-      }
+      //   txListener(tx, {
+      //     onTxConfirmed: async () => {
+      //       refetchStakingRewards.value();
+      //     }
+      //   });
+      // }
       modalTransactionsPreviewIsOpen.value = true;
     }
     const completedSteps = computed(() => {

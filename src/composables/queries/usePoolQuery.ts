@@ -39,17 +39,17 @@ export default function usePoolQuery(
   const queryFn = async () => {
     const [pool] = await balancerSubgraphService.pools.get({
       where: {
-        id: id.toLowerCase(),
-        totalShares_gt: -1 // Avoid the filtering for low liquidity pools
+        id: id.toLowerCase()
+        //totalShares_gt: -1 // Avoid the filtering for low liquidity pools
       }
     });
 
-    if (
-      (isStableLike(pool.poolType) && !POOLS.Stable.AllowList.includes(id)) ||
-      (isInvestment(pool.poolType) && !POOLS.Investment.AllowList.includes(id))
-    ) {
-      throw new Error('Pool not allowed');
-    }
+    // if (
+    //   (isStableLike(pool.poolType) && !POOLS.Stable.AllowList.includes(id)) ||
+    //   (isInvestment(pool.poolType) && !POOLS.Investment.AllowList.includes(id))
+    // ) {
+    //   throw new Error('Pool not allowed');
+    // }
 
     await injectTokens([
       ...pool.tokensList,

@@ -565,43 +565,43 @@ export default defineComponent({
 
     async function submit(): Promise<void> {
       if (!data.withdrawForm.validate()) return;
-      if (!byPool[0].stakedAmount.isZero()) {
-        transactions.value = [
-          {
-            title: t('stopEarningRewards'),
-            handler: async () => {
-              try {
-                const tx = await liquidityRewardsContracts.value[0].withdraw(
-                  byPool[0].stakedAmount,
-                  currentWeek.value
-                );
+      // if (!byPool[0].stakedAmount.isZero()) {
+      //   transactions.value = [
+      //     {
+      //       title: t('stopEarningRewards'),
+      //       handler: async () => {
+      //         try {
+      //           const tx = await liquidityRewardsContracts.value[0].withdraw(
+      //             byPool[0].stakedAmount,
+      //             currentWeek.value
+      //           );
 
-                addTransaction({
-                  id: tx.hash,
-                  type: 'tx',
-                  action: 'withdraw',
-                  summary: t('transactionSummary.withdraw'),
-                  details: {
-                    contractAddress: liquidityRewardsContracts.value[0].address
-                  }
-                });
-              } catch (error) {
-                addErrorNotification((error as any)?.data.message);
-                console.error(error);
-              }
-            }
-          },
-          {
-            title: t('withdrawTokens'),
-            handler: async () => {
-              await withdraw();
-            }
-          }
-        ];
-        modalTransactionsPreviewIsOpen.value = true;
-      } else {
-        await withdraw();
-      }
+      //           addTransaction({
+      //             id: tx.hash,
+      //             type: 'tx',
+      //             action: 'withdraw',
+      //             summary: t('transactionSummary.withdraw'),
+      //             details: {
+      //               contractAddress: liquidityRewardsContracts.value[0].address
+      //             }
+      //           });
+      //         } catch (error) {
+      //           addErrorNotification((error as any)?.data.message);
+      //           console.error(error);
+      //         }
+      //       }
+      //     },
+      //     {
+      //       title: t('withdrawTokens'),
+      //       handler: async () => {
+      //         await withdraw();
+      //       }
+      //     }
+      //   ];
+      //   modalTransactionsPreviewIsOpen.value = true;
+      // } else {
+      await withdraw();
+      // }
     }
 
     watch(

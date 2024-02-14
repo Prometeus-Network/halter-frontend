@@ -28,6 +28,7 @@ export default function usePoolsQuery(
   filterOptions?: FilterOptions
 ) {
   // COMPOSABLES
+
   const { injectTokens, dynamicDataLoading, prices } = useTokens();
   const { currency } = useUserSettings();
   const { appLoading } = useApp();
@@ -54,6 +55,7 @@ export default function usePoolsQuery(
     const pools = await balancerSubgraphService.pools.get(queryArgs);
 
     const tokens = flatten(pools.map(pool => pool.tokensList));
+    console.log('TOKENS BEFORE INJECT: ', tokens);
     await injectTokens(tokens);
     await forChange(dynamicDataLoading, false);
 

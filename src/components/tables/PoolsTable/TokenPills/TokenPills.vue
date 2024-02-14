@@ -22,6 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { fNum } = useNumbers();
 const { tokens, hasBalance } = useTokens();
+console.log('ALL TOKENS: ', tokens);
 
 /**
  * COMPUTED
@@ -42,7 +43,8 @@ const isSelectedInHiddenTokens = computed(() =>
  * METHODS
  */
 function symbolFor(token: PoolToken): string {
-  return tokens.value[token.address]?.symbol || '---';
+  console.log('TOKENTOKEN: ', tokens.value[token.address]?.symbol);
+  return tokens.value[token.address]?.symbol || 'TestnetToken';
 }
 
 function weightFor(token: PoolToken): string {

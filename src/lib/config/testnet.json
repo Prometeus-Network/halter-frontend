@@ -8,7 +8,7 @@
   "unknown": false,
   "rpc": "https://neat-proportionate-moon.blast-sepolia.quiknode.pro/97a3b0184ee565d04e32ca2ac0e8300a1dfad2c9/",
   "ws": "wss://neat-proportionate-moon.blast-sepolia.quiknode.pro/97a3b0184ee565d04e32ca2ac0e8300a1dfad2c9/",
-  "loggingRpc": "https://blast-sepolia-testnet.rpc.thirdweb.com",
+  "loggingRpc": "https://neat-proportionate-moon.blast-sepolia.quiknode.pro/97a3b0184ee565d04e32ca2ac0e8300a1dfad2c9/",
   "explorer": "https://testnet.blastscan.io/",
   "subgraph": "https://subgraph.halter.finance/subgraphs/name/halter/halter",
   "poolsUrlV1": "",

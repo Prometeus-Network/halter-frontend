@@ -10,7 +10,7 @@
   "ws": "wss://neat-proportionate-moon.blast-sepolia.quiknode.pro/97a3b0184ee565d04e32ca2ac0e8300a1dfad2c9/",
   "loggingRpc": "https://blast-sepolia-testnet.rpc.thirdweb.com",
   "explorer": "https://testnet.blastscan.io/",
-  "subgraph": "https://subgraph.halter.finance",
+  "subgraph": "https://subgraph.halter.finance/subgraphs/name/halter/halter",
   "poolsUrlV1": "",
   "poolsUrlV2": "",
   "supportsEIP1559": true,

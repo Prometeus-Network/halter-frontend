@@ -75,7 +75,7 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
   '168587773': {
     Balancer: {
       Default:
-        'https://gist.githubusercontent.com/beshanoe/3783ce59911758e79d93c3a22974afd4/raw/c36623504d024d125f3ae194bd81e8e94c3a11e6/halter-tokenlist.json',
+        'https://gist.githubusercontent.com/Georgyskr/16c86d73ae13c82574f988177a35c748/raw/a5225c7e55363630fbdf7ddd2b3a5e0577c36a2c/tokenList.json',
       Vetted:
         'https://storageapi.fleek.co/tomafrench-team-bucket/arbitrum.vetted.tokenlist.json'
     },

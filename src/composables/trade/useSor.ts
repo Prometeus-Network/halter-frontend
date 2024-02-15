@@ -179,17 +179,17 @@ export default function useSor({
     }
 
     sorManager = new SorManager(
-      isV1Supported,
-      rpcProviderService.jsonProvider,
-      new BigNumber(GAS_PRICE),
-      Number(MAX_POOLS),
-      configService.network.chainId,
-      configService.network.addresses.weth,
-      poolsUrlV1,
-      subgraphUrl
+      isV1Supported, // false
+      rpcProviderService.jsonProvider, // https://neat-proportionate-moon.blast-sepolia.quiknode.pro/97a3b0184ee565d04e32ca2ac0e8300a1dfad2c9
+      new BigNumber(GAS_PRICE), // 100000000000
+      Number(MAX_POOLS), // 4
+      configService.network.chainId, // 168587773
+      configService.network.addresses.weth, // 0x4200000000000000000000000000000000000023
+      poolsUrlV1, // ?
+      subgraphUrl // https://subgraph.halter.finance/subgraphs/name/halter/halter
     );
 
-    fetchPools();
+    await fetchPools();
   }
 
   async function fetchPools(): Promise<void> {

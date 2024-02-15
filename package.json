@@ -18,7 +18,8 @@
     "storybook:build": "build-storybook",
     "tailwind:build": "tailwind-config-viewer export ./tailwind-static",
     "tailwind:view": "tailwind-config-viewer -o",
-    "typechain": "typechain --target ethers-v5 --out-dir src/lib/typechain 'src/lib/typechain/abi/*.json'"
+    "typechain": "typechain --target ethers-v5 --out-dir src/lib/typechain 'src/lib/typechain/abi/*.json'",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@balancer-labs/assets": "github:balancer-labs/assets#master",
@@ -104,12 +105,17 @@
     "eslint-plugin-vue": "^7.16.0",
     "husky": "^6.0.0",
     "nock": "^13.1.1",
+    "patch-package": "^8.0.0",
     "prettier": "^1.19.1",
     "tailwind-config-viewer": "^1.5.0",
     "typechain": "^6.0.0",
     "typescript": "^4.3.5",
     "vue-cli-plugin-webpack-bundle-analyzer": "^2.0.0",
     "vue-loader": "^16.5.0"
+  },
+  "overrides": {
+    "@ethersproject/bignumber": "5.4.1",
+    "bignumber.js": "9.0.1"
   },
   "license": "MIT",
   "repository": "halter-core/halter-frontend",

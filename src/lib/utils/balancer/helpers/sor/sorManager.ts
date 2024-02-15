@@ -80,8 +80,10 @@ export class SorManager {
       chainId,
       poolsSourceV1
     );
-
+    console.log('initiliasing sor...');
+    console.log(provider, chainId, subgraphUrlV2);
     this.sorV2 = new SORV2(provider, chainId, subgraphUrlV2);
+    console.log('SOR INITIALISED!: ', this.sorV2);
     this.weth = weth;
     this.gasPrice = gasPrice;
     this.maxPools = maxPools;
@@ -94,7 +96,7 @@ export class SorManager {
     manualCost: BigNumber | null = null
   ): Promise<BigNumber> {
     tokenAddr = tokenAddr === NATIVE_ASSET_ADDRESS ? this.weth : tokenAddr;
-
+    console.log('tokenAddr: ', tokenAddr);
     if (manualCost) {
       await this.sorV2.swapCostCalculator.setNativeAssetPriceInToken(
         tokenAddr,

@@ -9,7 +9,6 @@ export enum Network {
   POLYGON = 137,
   ARBITRUM = 42161,
   FANTOM = 250,
-
   BLAST_TESTNET = 168587773
 }
 

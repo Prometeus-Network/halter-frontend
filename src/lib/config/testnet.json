@@ -20,7 +20,7 @@
     "symbol": "ETH",
     "decimals": 18,
     "deeplinkId": "ethereum",
-    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x4E15361FD6b4BB609Fa63C81A2be19d873717870/logo.png"
+    "logoURI": "https://gist.githubusercontent.com/Georgyskr/16c86d73ae13c82574f988177a35c748/raw/a4542c77afb4e38b29ce05b4df786e234593da41/tokenList.json"
   },
   "addresses": {
     "exchangeProxy": "",

@@ -15,21 +15,21 @@ export default function useGlobalQueryWatchers() {
   const { addAlert, removeAlert } = useAlerts();
   const { t } = useI18n();
 
-  watch(priceQueryError, () => {
-    if (priceQueryError.value) {
-      addAlert({
-        id: 'price-fetch-error',
-        label: t('alerts.price-fetch-error'),
-        type: AlertType.ERROR,
-        persistent: true,
-        action: refetchPrices.value,
-        actionLabel: t('alerts.retry-label'),
-        priority: AlertPriority.MEDIUM
-      });
-    } else {
-      removeAlert('price-fetch-error');
-    }
-  });
+  // watch(priceQueryError, () => {
+  //   if (priceQueryError.value) {
+  //     addAlert({
+  //       id: 'price-fetch-error',
+  //       label: t('alerts.price-fetch-error'),
+  //       type: AlertType.ERROR,
+  //       persistent: true,
+  //       action: refetchPrices.value,
+  //       actionLabel: t('alerts.retry-label'),
+  //       priority: AlertPriority.MEDIUM
+  //     });
+  //   } else {
+  //     removeAlert('price-fetch-error');
+  //   }
+  // });
 
   watch(balancesQueryError, () => {
     if (balancesQueryError.value) {

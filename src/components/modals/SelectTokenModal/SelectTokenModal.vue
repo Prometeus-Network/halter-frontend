@@ -21,7 +21,7 @@
           @click="toggleSelectTokenList"
           class="flex items-center group cursor-pointer"
         >
-          <span class="text-xs text-gray-500">{{ $t('tokenLists') }}</span>
+          <!-- <span class="text-xs text-gray-500">{{ $t('tokenLists') }}</span>
           <div class="flex items-center ml-2">
             <span class="mr-1 ">
               <img
@@ -36,7 +36,7 @@
               size="sm"
               class="ml-1 text-blue-500 group-hover:text-pink-500 group-focus:text-pink-500 transition-all duration-200 ease-out "
             />
-          </div>
+          </div> -->
         </div>
       </div>
     </template>
